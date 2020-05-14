@@ -1,0 +1,28 @@
+.bg {
+    background: url('/assets/images/no-logo.jpg') center center no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 12em;
+}
+.svg {
+    background: url('/assets/images/dixit-waves.svg') center center repeat-x;
+    background-size: contain;
+    height: 200px;
+    margin-top: -120px;
+}
+img.main {
+    max-height: 100px;
+    margin-top: 20px;
+}
+a.btn {
+    cursor: pointer;
+}
+.jumbotron {
+    margin-top: 6em;
+    background: rgba(233,236,239, 1);
+}
+.modal-body button {
+  margin: 0px 5px;
+}

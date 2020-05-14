@@ -1,0 +1,48 @@
+
+<div class="bg">
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-12 text-center">
+                <img class="main img-responsive center-block" src="../../assets/images/big-logo.png" alt="dixit"/>
+            </div>
+            <div class="col-md-12">
+                <div class="jumbotron text-center shadow-sm p-3 mb-5">
+                    <h1 class="display-4 text-center">Welcome to Dixit!</h1>
+                    <p class="lead">The popular game of imaginative storytelling...</p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>You can create a new game ... </p>
+                            <button class="btn btn-warning" (click)="open(enterName)">New game</button>
+                        </div>
+                        <div class="col-md-6">
+                            <p>... or you can enter in a friend's one</p>
+                            <button class="btn btn-warning" (click)="open(enterName)">Join game</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="svg"></div>
+<ng-template #enterName let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <blockquote class="blockquote">
+            <p class="mb-0">What's your name fellow?</p>
+          </blockquote>
+           <!-- maxlength -->
+          <input type="text" name="userName" ngbAutofocus class="form-control" />
+          <br>
+          <button type="button" class="btn btn-light" (click)="modal.close('Cancel click')">Cancel</button>
+          <button type="button" class="btn btn-warning" (click)="modal.close('Save click')">Let's go</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
