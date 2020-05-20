@@ -1,0 +1,49 @@
+.room {
+  height: 100vh;
+}
+div.room::after {
+  content: "";
+  background: url('/assets/images/dixit-room.jpg') center center no-repeat;
+  opacity: 0.85;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+img.main {
+  max-height: 30px;
+}
+.wrap {
+  /*background: url('/assets/images/big-logo.png') #964B00 center center no-repeat;*/
+  background: linear-gradient(to top, #996633 0%, #663300 100%);
+  border-radius: 10px;
+  padding: 30px;
+}
+.players-wrapper {
+  border: 20px solid white;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: .125rem .25rem rgba(0,0,0,.075) !important;
+}
+
+.header-container {
+  padding: 12px 4px;
+  text-align: center;
+  border-radius: 2px;
+  background-color: #f8f9fa !important;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+.players-container > div {
+  height: 40px;
+  line-height: 24px;
+  border-radius: 2px;
+}
+
