@@ -5,7 +5,7 @@ import { StartComponent } from './start/start.component';
 
 const routes: Routes = [
   { path: '', component: StartComponent},
-  { path: 'room', component: RoomComponent}
+  { path: 'room/:key', component: RoomComponent}
 ];
 
 @NgModule({

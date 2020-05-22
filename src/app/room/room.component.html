@@ -4,14 +4,23 @@
       <a class="navbar-brand" href="#">
         <img src="../../assets/images/big-logo.png" class="d-inline-block align-top main" alt="">
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation" (click)="toggleNavbarCollapsing()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="navbar-collapse" [class.collapse]="navbarCollapsed" id="navbarNav">
         <ul class="navbar-nav mr-auto"></ul>
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" routerLink="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.buymeacoffee.com/">Rules</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="https://www.buymeacoffee.com/">Donate</a>
@@ -24,32 +33,42 @@
   </nav>
   <div class="container">
     <div class="row justify-content-center">
-
-       <div class="players-wrapper">
+       <div class="players-wrapper col-sm-8 col-md-6 col-lg-5 col-xl-4">
         <div class="wrap col-12">
           <div class="header-container">
-             <h5 id="room-code"><strong>Room Code: LUPEV (copy img)</strong></h5>
+             <h5 id="room-code"><strong>Room Code: </strong></h5>
              <div class="game-status" id="game-status"><em> Waiting for players to ready up</em></div>
           </div>
           <div class="players-container">
-            <div class="p-2 mb-2 bg-white text-dark">Alexa <span class="not-ready">not ready</span></div>
-            <div class="p-2 mb-2 bg-secondary text-white"></div>
-            <div class="p-2 mb-2 bg-success text-white"></div>
-            <div class="p-2 mb-2 bg-danger text-white"></div>
-            <div class="p-2 mb-2 bg-warning text-dark"></div>
-            <div class="p-2 mb-2 bg-info text-white"></div>
-            <div class="p-2 mb-2 bg-light text-dark"></div>
-            <div class="p-2 mb-2 bg-dark text-white"></div>
+            <div class="p-2 mb-2" color="blue">
+              <span>Alexa</span>
+              <span class="not-ready float-right here"></span>
+            </div>
+            <div class="p-2 mb-2" color="green">
+              <span>Dida</span>
+              <span class="ready float-right here"></span>
+            </div>
+            <div class="p-2 mb-2" color="red"></div>
+            <div class="p-2 mb-2" color="yellow"></div>
+            <div class="p-2 mb-2" color="lightblue"></div>
+            <div class="p-2 mb-2" color="white"></div>
+            <div class="p-2 mb-2" color="black"></div>
+            <div class="p-2" color="grey"></div>
           </div>
        </div>
       </div>
-
      </div>
-     <div class="btn-container" id="buttons">
-      <form class="button_to" method="post" action="/ready_up" data-remote="true"><input id="pause" class="btn-flat ready-button" type="submit" value="Ready up" style=""><input type="hidden" name="authenticity_token" value="HYvIGxMnZsXlTNPZ9sqZWQu6jUm3AK3ifVKN28zftTXqpRrwIRA9BorGqQ0zOydnP/ionO07zU5jwqk/YSUOLQ=="><input type="hidden" name="lobby_id" value="17986"><input type="hidden" name="user" value="68093"></form>
-      <form class="button_to" method="post" action="/ready_up" data-remote="true"><input id="resume" class="btn-flat unready-button" type="submit" value="Unready" style="display: none;"><input type="hidden" name="authenticity_token" value="HYvIGxMnZsXlTNPZ9sqZWQu6jUm3AK3ifVKN28zftTXqpRrwIRA9BorGqQ0zOydnP/ionO07zU5jwqk/YSUOLQ=="><input type="hidden" name="lobby_id" value="17986"><input type="hidden" name="user" value="68093"></form>
-      <button name="button" type="submit" id="start-game-button" class="btn-flat start-button" disabled="" remote="true">Start Round</button>
-    </div>
  </div>
+ <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
+      <div class="btn-container text-center" id="buttons">
+        <button type="button" class="btn btn-warning ready">Ready Up</button>
+        <button type="button" class="btn btn-success start" disabled="disabled">Start Game</button>
+      </div>
+    </div>
+  </div>
 </div>
+</div>
+
 

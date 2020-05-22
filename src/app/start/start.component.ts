@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewGameService } from '../new-game.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-start',
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class StartComponent implements OnInit {
   username:string;
   usernameBtnDisabled = true;
+
   @ViewChild('enterNameModal') enterNameModal: ElementRef;
   @ViewChild('enterRoomModal') enterRoomModal: ElementRef;
 
@@ -18,6 +19,7 @@ export class StartComponent implements OnInit {
     private modalService: NgbModal,
     private newGameService: NewGameService,
     private router: Router,
+    private route: ActivatedRoute
   ) {
     this.username = JSON.parse(localStorage.getItem('username'));
   }
@@ -35,7 +37,7 @@ export class StartComponent implements OnInit {
     if (!this.username) {
       this.open(this.enterNameModal);
     } else {
-      this.router.navigate(['room']);
+      this.newGameService.hostNewGame();
     }
   }
 

@@ -3,13 +3,13 @@
 }
 div.room::after {
   content: "";
-  background: url('/assets/images/dixit-room.jpg') center center no-repeat;
+  background: url('/assets/images/dixit-room.jpg') rgba(43, 51, 136) center center no-repeat;
   opacity: 0.85;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  position: absolute;
+  position: fixed;
   z-index: -1;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -20,30 +20,85 @@ img.main {
   max-height: 30px;
 }
 .wrap {
-  /*background: url('/assets/images/big-logo.png') #964B00 center center no-repeat;*/
   background: linear-gradient(to top, #996633 0%, #663300 100%);
-  border-radius: 10px;
-  padding: 30px;
+  border-radius: 1em;
+  padding: 1em;
 }
 .players-wrapper {
-  border: 20px solid white;
+  border-top: 15px;
+  border-bottom: 15px;
+  border-left: 0px;
+  border-right: 0px;
+  border-style: solid;
+  border-color: #fff;
   background-color: #fff;
   border-radius: 10px;
   margin: 20px;
   box-shadow: .125rem .25rem rgba(0,0,0,.075) !important;
 }
-
 .header-container {
   padding: 12px 4px;
   text-align: center;
   border-radius: 2px;
   background-color: #f8f9fa !important;
   margin-bottom: 16px;
-  margin-top: 8px;
+}
+.players-container {
+  background: url("/assets/images/big-logo.png") no-repeat center 33%;
+  background-size: 15em;
 }
 .players-container > div {
-  height: 40px;
-  line-height: 24px;
+  height: 2.25em;
   border-radius: 2px;
 }
+.players-container {
+  div[color] {
+    border-left-width: 2em;
+    border-left-style: solid;
+    background-color: rgba(255,255,255,0.85);
+    font-weight: bold;
+  }
+  div[color="blue"] {
+    border-left-color: #007bff;
+  }
+  div[color="green"] {
+    border-left-color: #28a745;
+  }
+  div[color="red"] {
+    border-left-color: #dc3545;
+  }
+  div[color="yellow"] {
+    border-left-color: #ffc107;
+  }
+  div[color="lightblue"] {
+    border-left-color: #17a2b8;
+  }
+  div[color="white"] {
+    border-left-color: #f8f9fa;
+  }
+  div[color="black"] {
+    border-left-color: #343a40;
+  }
+  div[color="grey"] {
+    border-left-color: #6c757d;
+  }
+  .here {
+    height: 36px;
+    width: 36px;
+  }
+  .ready {
+    background: url('/assets/images/ready.png') no-repeat center 2px;
+  }
+  .not-ready {
+    background: url('/assets/images/not-ready.png') no-repeat center 2px;
+  }
+}
+#buttons {
+  margin-bottom: 1em;
+
+  button.ready {
+    margin-right: 20px;
+  }
+}
+
 

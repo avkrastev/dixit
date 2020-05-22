@@ -7,14 +7,19 @@ import { NewGameService } from '../new-game.service';
   styleUrls: ['./room.component.scss']
 })
 export class RoomComponent implements OnInit {
-
+  navbarCollapsed:boolean = true;
   constructor(private newGameService: NewGameService) { }
 
   ngOnInit(): void {
+    console.log(this.newGameService.roomCode);
   }
 
   logout() {
     this.newGameService.removeUsername();
+  }
+
+  toggleNavbarCollapsing() {
+    this.navbarCollapsed = !this.navbarCollapsed;
   }
 
 }
