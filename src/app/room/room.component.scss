@@ -46,40 +46,46 @@ img.main {
 .players-container {
   background: url("/assets/images/big-logo.png") no-repeat center 33%;
   background-size: 15em;
+  .white {
+    color: #fff;
+  }
+}
+.players-container.not-found {
+  min-height: 440px;
 }
 .players-container > div {
   height: 2.25em;
   border-radius: 2px;
 }
 .players-container {
-  div[color] {
+  div[data-color] {
     border-left-width: 2em;
     border-left-style: solid;
     background-color: rgba(255,255,255,0.85);
     font-weight: bold;
   }
-  div[color="blue"] {
+  div[data-color="blue"] {
     border-left-color: #007bff;
   }
-  div[color="green"] {
+  div[data-color="green"] {
     border-left-color: #28a745;
   }
-  div[color="red"] {
+  div[data-color="red"] {
     border-left-color: #dc3545;
   }
-  div[color="yellow"] {
+  div[data-color="yellow"] {
     border-left-color: #ffc107;
   }
-  div[color="lightblue"] {
+  div[data-color="lightblue"] {
     border-left-color: #17a2b8;
   }
-  div[color="white"] {
+  div[data-color="white"] {
     border-left-color: #f8f9fa;
   }
-  div[color="black"] {
+  div[data-color="black"] {
     border-left-color: #343a40;
   }
-  div[color="grey"] {
+  div[data-color="grey"] {
     border-left-color: #6c757d;
   }
   .here {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewGameService } from '../new-game.service';
+import { Params, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-room',
@@ -8,10 +9,25 @@ import { NewGameService } from '../new-game.service';
 })
 export class RoomComponent implements OnInit {
   navbarCollapsed:boolean = true;
-  constructor(private newGameService: NewGameService) { }
+  pageNotFound:boolean = false;
+  room:string;
+
+  constructor(
+    private newGameService: NewGameService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.newGameService.roomCode);
+    this.route.params
+		.subscribe(
+			(params: Params) => {
+        if (params['key'] == '404') { // Page not found
+          this.pageNotFound = true;
+        } else {
+          this.room = params['key'];
+        }
+			}
+		);
   }
 
   logout() {
@@ -20,6 +36,14 @@ export class RoomComponent implements OnInit {
 
   toggleNavbarCollapsing() {
     this.navbarCollapsed = !this.navbarCollapsed;
+  }
+
+  changePlayerColor(color) {
+    console.log(color);
+  }
+
+  get players() {
+    return this.newGameService.getPlayers();
   }
 
 }

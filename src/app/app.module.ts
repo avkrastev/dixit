@@ -11,7 +11,7 @@ import { StartComponent } from './start/start.component';
   declarations: [
     AppComponent,
     RoomComponent,
-    StartComponent,
+    StartComponent
   ],
   imports: [
     BrowserModule,

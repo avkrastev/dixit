@@ -59,7 +59,7 @@ export class StartComponent implements OnInit {
         if (content == this.enterNameModal) {
           if (result && result.trim() != '') {
             this.newGameService.storeName(result);
-            this.router.navigate(['room']);
+            this.router.navigate(['/room']);
           }
         }
         if (content == this.enterRoomModal) {

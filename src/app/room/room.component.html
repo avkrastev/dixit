@@ -20,7 +20,7 @@
                 <a class="nav-link" routerLink="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://www.buymeacoffee.com/">Rules</a>
+              <a class="nav-link" href="https://www.dixit.com/">Rules</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="https://www.buymeacoffee.com/">Donate</a>
@@ -35,31 +35,36 @@
     <div class="row justify-content-center">
        <div class="players-wrapper col-sm-8 col-md-6 col-lg-5 col-xl-4">
         <div class="wrap col-12">
-          <div class="header-container">
-             <h5 id="room-code"><strong>Room Code: </strong></h5>
+          <div *ngIf="!pageNotFound" class="header-container">
+             <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
              <div class="game-status" id="game-status"><em> Waiting for players to ready up</em></div>
           </div>
-          <div class="players-container">
-            <div class="p-2 mb-2" color="blue">
-              <span>Alexa</span>
-              <span class="not-ready float-right here"></span>
-            </div>
-            <div class="p-2 mb-2" color="green">
-              <span>Dida</span>
-              <span class="ready float-right here"></span>
-            </div>
-            <div class="p-2 mb-2" color="red"></div>
-            <div class="p-2 mb-2" color="yellow"></div>
-            <div class="p-2 mb-2" color="lightblue"></div>
-            <div class="p-2 mb-2" color="white"></div>
-            <div class="p-2 mb-2" color="black"></div>
-            <div class="p-2" color="grey"></div>
+
+          <div *ngIf="!pageNotFound; else notFound" class="players-container">
+                <div
+                  class="p-2 mb-2"
+                  *ngFor="let player of players; let i = index"
+                  [attr.data-color]="player.color"
+                  (click)="changePlayerColor(player.color)">
+                  <span data-id="{{ i }}" >{{ player.name }}</span>
+                  <span *ngIf="player.name">
+                    <span *ngIf="player.ready" class="ready float-right here"></span>
+                    <span *ngIf="!player.ready" class="not-ready float-right here"></span>
+                  </span>
+              </div>
           </div>
+
+          <ng-template #notFound>
+            <div class="players-container not-found">
+              <h5 class="text-center white">Sorry!</h5>
+              <h5 class="text-center white">The page was not found.</h5>
+            </div>
+         </ng-template>
        </div>
       </div>
      </div>
  </div>
- <div class="container">
+ <div *ngIf="!pageNotFound" class="container">
   <div class="row justify-content-center">
     <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
       <div class="btn-container text-center" id="buttons">
