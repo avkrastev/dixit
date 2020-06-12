@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NewGameService } from '../new-game.service';
 import { Params, ActivatedRoute } from '@angular/router';
+import { Player } from '../models/player.model';
 
 @Component({
   selector: 'app-room',
@@ -10,6 +11,7 @@ import { Params, ActivatedRoute } from '@angular/router';
 export class RoomComponent implements OnInit {
   navbarCollapsed:boolean = true;
   pageNotFound:boolean = false;
+  players:Player[];
   room:string;
 
   constructor(
@@ -25,6 +27,8 @@ export class RoomComponent implements OnInit {
           this.pageNotFound = true;
         } else {
           this.room = params['key'];
+          this.newGameService.checkIfUserLogged();
+          this.players = this.newGameService.getPlayersPerRoom(this.room);
         }
 			}
 		);
@@ -40,10 +44,8 @@ export class RoomComponent implements OnInit {
 
   changePlayerColor(color) {
     console.log(color);
-  }
-
-  get players() {
-    return this.newGameService.getPlayers();
+    console.log(this.room);
+    console.log(this.players);
   }
 
 }

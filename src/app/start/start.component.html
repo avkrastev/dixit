@@ -28,51 +28,6 @@
 </div>
 <div class="svg"></div>
 
-<ng-template #enterNameModal let-modal>
-  <div class="modal-body">
-    <div class="container test">
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <blockquote class="blockquote">
-            <p class="mb-0">What's your name fellow?</p>
-          </blockquote>
-          <input
-            type="text"
-            name="userName"
-            maxlength="16"
-            (keyup)="setUsername($event)"
-            ngbAutofocus class="form-control"
-            autocomplete="off" />
-          <br>
-          <button type="button" class="btn btn-light" (click)="modal.close()">Cancel</button>
-          <button type="button" class="btn btn-warning" [disabled]="usernameBtnDisabled" (click)="modal.close(username)">Let's go</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
+<ng-template #enterNameModal let-modal></ng-template>
 
-<ng-template #enterRoomModal let-modal>
-  <div class="modal-body">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <blockquote class="blockquote">
-            <p class="mb-0">Enter access code to join</p>
-          </blockquote>
-          <input
-            type="text"
-            name="userName"
-            maxlength="5"
-            (change)="accessRoom($event)"
-            ngbAutofocus class="form-control"
-            autocomplete="off"
-            placeholder="AFGEJ" />
-          <br>
-          <button type="button" class="btn btn-light" (click)="modal.close()">Cancel</button>
-          <button type="button" class="btn btn-warning" [disabled]="usernameBtnDisabled" (click)="modal.close(username)">Join</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
+<ng-template #enterRoomModal let-modal></ng-template>

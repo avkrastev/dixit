@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit } from '@angular/core';
 import { NewGameService } from '../new-game.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ModalsService } from '../modals.service';
 
 @Component({
   selector: 'app-start',
@@ -11,65 +10,29 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class StartComponent implements OnInit {
   username:string;
   usernameBtnDisabled = true;
-
-  @ViewChild('enterNameModal') enterNameModal: ElementRef;
-  @ViewChild('enterRoomModal') enterRoomModal: ElementRef;
+  modal:string;
 
   constructor(
-    private modalService: NgbModal,
+    private modalsService: ModalsService,
     private newGameService: NewGameService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.username = JSON.parse(localStorage.getItem('username'));
-  }
-
-  setUsername(event: any) { // without type info
-    this.username = event.target.value;
-    this.usernameBtnDisabled = true;
-
-    if (this.username && this.username.trim() != '') {
-      this.usernameBtnDisabled = false;
-    }
   }
 
   newGame() {
     if (!this.username) {
-      this.open(this.enterNameModal);
+      this.modalsService.open('enterName');
     } else {
       this.newGameService.hostNewGame();
     }
   }
 
   join() {
-    const modal = !this.username ? this.enterNameModal : this.enterRoomModal;
-    this.open(modal);
+    const modal = !this.username ? 'enterName' : 'enterRoom';
+    this.modalsService.open(modal);
   }
 
-  accessRoom(event: any) {
 
-  }
-
-  private open(content) {
-    this.modalService.open(content, {
-      centered: true,
-      size: 'sm'
-    }).result.then(
-    (result) => {
-        if (content == this.enterNameModal) {
-          if (result && result.trim() != '') {
-            this.newGameService.storeName(result);
-            this.router.navigate(['/room']);
-          }
-        }
-        if (content == this.enterRoomModal) {
-          // TODO
-        }
-      },
-    (close) => {
-
-    });
-  }
-
-  ngOnInit(): void {}
 }

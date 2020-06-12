@@ -2,26 +2,34 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Player } from './models/player.model';
 import { Subject } from 'rxjs';
+import { ModalsService } from './modals.service';
+
+interface Game {
+  [room: string]: Player[];
+}
 
 @Injectable({providedIn: 'root'})
 export class NewGameService {
   playersChanged = new Subject<Player[]>();
   roomCode:string;
 
-  private players: Player[] = [
-    new Player('Alexander', 'blue', false),
-    new Player('', 'green', false),
-    new Player('Diana', 'red', true),
-    new Player('', 'yellow', false),
-    new Player('', 'lightblue', false),
-    new Player('', 'white', false),
-    new Player('', 'black', false),
-    new Player('', 'grey', false),
-  ];
+  private games: Game = {
+    '34KL2': [
+      new Player('Alexander', 'blue', false, 0, false),
+      new Player('', 'green', false, 0, false),
+      new Player('Diana', 'red', true, 0, false),
+      new Player('', 'yellow', false, 0, false),
+      new Player('', 'lightblue', false, 0, false),
+      new Player('', 'white', false, 0, false),
+      new Player('', 'black', false, 0, false),
+      new Player('', 'grey', false, 0, false),
+    ]
+  }
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalsService: ModalsService,
   ){}
 
   storeName(username) {
@@ -38,22 +46,37 @@ export class NewGameService {
     this.router.navigate(['room', this.roomCode], { relativeTo: this.route });
 
     const player = JSON.parse(localStorage.getItem('username'));
-    this.addPlayer(new Player(player, '', false));
+
+    this.addPlayer(this.roomCode, new Player(player, '', false, 0, false));
   }
 
-  getPlayers() {
-    return this.players.slice();
+  getPlayersPerRoom(room) {
+    if (typeof this.games[room] == 'undefined') {
+      this.router.navigate(['/room/404']);
+    }
+    return this.games[room].slice();
   }
 
-  addPlayer(player: Player) {
-    for (let pl in this.players) {
-      if (this.players[pl]['name'] == '') {
-        this.players[pl]['name'] = player.name;
+  addPlayer(room: string, player: Player) {
+    for (let pl in this.games[room]) {
+      if (this.games[room][pl]['name'] == '') {
+        this.games[room][pl]['name'] = player.name;
+        localStorage.setItem('color', JSON.stringify(player.color));
         break;
       }
     }
 
-    this.playersChanged.next(this.players.slice());
+    this.playersChanged.next(this.games[room].slice());
+  }
+
+  checkIfUserLogged() {
+    const player = JSON.parse(localStorage.getItem('username'));
+    if (player == null) {
+
+    }
+    console.log(player);
+
+    //this.modalsService.open('enterName');
   }
 
 }

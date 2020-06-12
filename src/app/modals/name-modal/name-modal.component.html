@@ -1,0 +1,21 @@
+<div class="modal-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <blockquote class="blockquote">
+          <p class="mb-0">What's your name fellow?</p>
+        </blockquote>
+        <input
+          type="text"
+          name="userName"
+          maxlength="16"
+          (keyup)="checkUsername($event)"
+          ngbAutofocus class="form-control"
+          autocomplete="off" />
+        <br>
+        <button type="button" class="btn btn-light" #close (click)="activeModal.close()">Cancel</button>
+        <button type="button" class="btn btn-warning" [disabled]="usernameBtnDisabled" (click)="setUsername()">Let's go</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,7 @@ import { RoomComponent } from './room/room.component';
 import { StartComponent } from './start/start.component';
 
 const routes: Routes = [
-  { path: '', component: StartComponent },
+  { path: '', component: StartComponent, pathMatch: 'full' },
   { path: 'room/:key', component: RoomComponent },
   { path: '**', redirectTo: 'room/404' },
 ];

@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { RoomComponent } from './room/room.component';
 import { StartComponent } from './start/start.component';
+import { NameModalComponent } from './modals/name-modal/name-modal.component';
+import { RoomModalComponent } from './modals/room-modal/room-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RoomComponent,
-    StartComponent
+    StartComponent,
   ],
   imports: [
     BrowserModule,
@@ -19,6 +21,10 @@ import { StartComponent } from './start/start.component';
     FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    NameModalComponent,
+    RoomModalComponent,
+],
 })
 export class AppModule { }
