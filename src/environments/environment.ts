@@ -3,7 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyBC7yyZTHeLoxIYtyUyAo0XGvNpSC1masI",
+    authDomain: "dixit-b50de.firebaseapp.com",
+    databaseURL: "https://dixit-b50de.firebaseio.com",
+    projectId: "dixit-b50de",
+    storageBucket: "dixit-b50de.appspot.com",
+    messagingSenderId: "1088436546912",
+    appId: "1:1088436546912:web:5bcb4a3d62f7ce48544205",
+    measurementId: "G-30L5B0BDEV"
+  }
 };
 
 /*

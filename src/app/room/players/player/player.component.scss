@@ -1,0 +1,44 @@
+div {
+  height: 2.25em;
+  border-radius: 2px;
+}
+div[data-color] {
+  border-left-width: 2em;
+  border-left-style: solid;
+  background-color: rgba(255,255,255,0.85);
+  font-weight: bold;
+}
+div[data-color="blue"] {
+  border-left-color: #007bff;
+}
+div[data-color="green"] {
+  border-left-color: #28a745;
+}
+div[data-color="red"] {
+  border-left-color: #dc3545;
+}
+div[data-color="yellow"] {
+  border-left-color: #ffc107;
+}
+div[data-color="lightblue"] {
+  border-left-color: #17a2b8;
+}
+div[data-color="white"] {
+  border-left-color: #f8f9fa;
+}
+div[data-color="black"] {
+  border-left-color: #343a40;
+}
+div[data-color="grey"] {
+  border-left-color: #6c757d;
+}
+.here {
+  height: 36px;
+  width: 36px;
+}
+.ready {
+  background: url('/assets/images/ready.png') no-repeat center 2px;
+}
+.not-ready {
+  background: url('/assets/images/not-ready.png') no-repeat center 2px;
+}

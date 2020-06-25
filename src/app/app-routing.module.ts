@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RoomComponent } from './room/room.component';
 import { StartComponent } from './start/start.component';
+import { GamesResolverService } from './games-resolver';
 
 const routes: Routes = [
   { path: '', component: StartComponent, pathMatch: 'full' },
-  { path: 'room/:key', component: RoomComponent },
-  { path: '**', redirectTo: 'room/404' },
+  { path: 'room/:key', component: RoomComponent, resolve: [GamesResolverService] },
+  { path: '**', redirectTo: 'rooms/404' },
 ];
 
 @NgModule({

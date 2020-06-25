@@ -1,6 +1,9 @@
 <div class="modal-body">
   <div class="container">
     <div class="row">
+      <div [hidden]="!fullRoom" class="col-md-12 text-center alert alert-warning" role="alert">
+        The room is full!
+      </div>
       <div class="col-md-12 text-center">
         <blockquote class="blockquote">
           <p class="mb-0">Enter access code to join</p>
@@ -11,10 +14,11 @@
           maxlength="5"
           ngbAutofocus class="form-control"
           autocomplete="off"
-          placeholder="AFGEJ" />
+          placeholder="AFGEJ"
+          #room />
         <br>
-        <button type="button" class="btn btn-light" (click)="activeModal.close()">Cancel</button>
-        <button type="button" class="btn btn-warning" [disabled]="usernameBtnDisabled" (click)="joinGame()">Join</button>
+        <button type="button" class="btn btn-light" #close (click)="activeModal.close()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="joinGame(room.value)">Join</button>
       </div>
     </div>
   </div>

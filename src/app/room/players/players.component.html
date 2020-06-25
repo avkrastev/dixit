@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row justify-content-center">
+     <div class="players-wrapper col-sm-8 col-md-6 col-lg-5 col-xl-4">
+      <div class="wrap col-12">
+        <div *ngIf="!pageNotFound" class="header-container">
+           <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
+           <div class="game-status" id="game-status"><em> Waiting for players to ready up</em></div>
+        </div>
+
+        <div *ngIf="!pageNotFound; else notFound" class="players-container">
+          <app-player
+            *ngFor="let playerEl of players; let i = index"
+            [player]="playerEl" [index]="i">
+          </app-player>
+        </div>
+
+        <ng-template #notFound>
+          <div class="players-container not-found">
+            <h5 class="text-center white">Sorry!</h5>
+            <h5 class="text-center white">The page was not found.</h5>
+          </div>
+       </ng-template>
+     </div>
+    </div>
+   </div>
+</div>
+<div *ngIf="!pageNotFound" class="container">
+<div class="row justify-content-center">
+  <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
+    <div class="btn-container text-center" id="buttons">
+      <button type="button" class="btn btn-warning ready">Ready Up</button>
+      <button type="button" class="btn btn-success start" disabled="disabled">Start Game</button>
+    </div>
+  </div>
+</div>
+</div>
+

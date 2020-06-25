@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewGameService } from 'src/app/new-game.service';
 import { Router } from '@angular/router';
+import { DataStorageService } from 'src/app/data-storage.service';
 
 @Component({
   selector: 'app-name-modal',
@@ -16,6 +17,7 @@ export class NameModalComponent implements OnInit {
   constructor(
     public activeModal: NgbActiveModal,
     private newGameService: NewGameService,
+    private dataStorage: DataStorageService,
     private router: Router,
   ) { }
 
@@ -34,7 +36,12 @@ export class NameModalComponent implements OnInit {
 
   setUsername() {
     this.newGameService.storeName(this.username);
-    this.router.navigate(['/room']);
+
+    if (this.router.url == '/') {
+      const roomCode = this.newGameService.hostNewGame();
+      this.dataStorage.createNewRoom(roomCode);
+    }
+
     this.close.nativeElement.click();
   }
 
