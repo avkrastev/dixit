@@ -4,14 +4,14 @@ export class Player {
   public ready: boolean;
   public points: number;
   public storyteller: boolean;
-  public key: string;
+  public uid: number;
 
-  constructor(name: string, color: string, ready: boolean, points: number, storyteller: boolean, key:string) {
+  constructor(name: string, color: string, ready: boolean, points: number, storyteller: boolean, uid:number) {
     this.name = name;
     this.color = color;
     this.ready = ready;
     this.points = points;
     this.storyteller = storyteller;
-    this.key = key;
+    this.uid = uid;
   }
 }

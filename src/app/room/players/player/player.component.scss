@@ -3,7 +3,7 @@ div {
   border-radius: 2px;
 }
 div[data-color] {
-  border-left-width: 2em;
+  border-left-width: 1em;
   border-left-style: solid;
   background-color: rgba(255,255,255,0.85);
   font-weight: bold;
@@ -41,4 +41,8 @@ div[data-color="grey"] {
 }
 .not-ready {
   background: url('/assets/images/not-ready.png') no-repeat center 2px;
+}
+img.myself {
+  position: relative;
+  top: -8px;
 }

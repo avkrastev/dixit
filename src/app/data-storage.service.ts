@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Player } from './models/player.model';
 import { NewGameService } from 'src/app/new-game.service';
-import { map, tap } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { Room } from './models/room.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
@@ -12,27 +11,27 @@ import { BehaviorSubject } from 'rxjs';
 export class DataStorageService {
   players:Room[] = [];
   playersPerRoom = new BehaviorSubject<any>(null);
+  roomStatus = new BehaviorSubject<any>(null);
 
   constructor(
     private router: Router,
-    private http: HttpClient,
     private newGameService: NewGameService,
-    private route: ActivatedRoute,
-    private db: AngularFirestore
+    private db: AngularFirestore,
   ) {}
 
   createNewRoom(room:string) {
     const host = JSON.parse(localStorage.getItem('username'));
+    const uid = JSON.parse(localStorage.getItem('uid'));
 
     const playersArray = [
-      new Player(host, 'blue', false, 0, false, ''),
-      new Player('', 'green', false, 0, false, ''),
-      new Player('', 'red', false, 0, false, ''),
-      new Player('', 'yellow', false, 0, false, ''),
-      new Player('', 'lightblue', false, 0, false, ''),
-      new Player('', 'white', false, 0, false, ''),
-      new Player('', 'black', false, 0, false, ''),
-      new Player('', 'grey', false, 0, false, ''),
+      new Player(host, 'blue', false, 0, false, uid),
+      new Player('', 'green', false, 0, false, 0),
+      new Player('', 'red', false, 0, false, 0),
+      new Player('', 'yellow', false, 0, false, 0),
+      new Player('', 'lightblue', false, 0, false, 0),
+      new Player('', 'white', false, 0, false, 0),
+      new Player('', 'black', false, 0, false, 0),
+      new Player('', 'grey', false, 0, false, 0),
     ];
 
     const playersObj = playersArray.map((obj)=> {return Object.assign({}, obj)});
@@ -45,64 +44,65 @@ export class DataStorageService {
     );
   }
 
-  getRoom(room:string) {
-    return this.db.collection('rooms').snapshotChanges().pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data:any = a.payload.doc.data();
+  newGame() {
+    const room = this.newGameService.hostNewGame();
 
-          if (data.hasOwnProperty('key') && data.key == room) {
-            const id = a.payload.doc.id;
-            return { id, ...data as {} };
-          }
-
-          return {};
-
-        }).filter(result => Object.keys(result).length > 0);
-      }),
-      tap(data => {
-          const roomData = Object.assign({}, ...data);
-          // TODO check the logic
-          if (Object.keys(roomData.players).length === 0) {
-            this.router.navigate(['/room/404']);
-          } else {
-            this.newGameService.setPlayersPerRoom(roomData.players);
-            this.playersPerRoom.next(roomData.players);
-          }
+    this.createNewRoom(room)
+      .then(() => {
+        this.router.navigate(['/room', room]);
       })
+      .catch(function(error) {
+        console.error("Error adding players to new room: ", error);
+      }
     );
   }
 
-  addPlayersToRoom(room:string) {
-    return this.db.collection('rooms').snapshotChanges().pipe(
-        map(actions => {
-          return actions.map(a => {
-            const data:any = a.payload.doc.data();
+  fetchRoom(room:string) {
+    let newPlayerJoined = false;
 
-            if (data.hasOwnProperty('key') && data.key == room) {
-              const id = a.payload.doc.id;
-              const emptySlot = data.players.find(players => { return players.name == '' });
+    return this.db.collection('rooms', ref => ref.where('key', '==', room)).snapshotChanges().pipe(
+      map(actions => {
+        const filteredData = actions.map(a => {
+          const data:any = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          const uid = JSON.parse(localStorage.getItem('uid'));
 
-              if (typeof emptySlot == 'undefined') {
-                return { ...data as {}, status: 'full'};
-              } else {
-                emptySlot.name = JSON.parse(localStorage.getItem('username'));
-              }
+          const newPlayer = data.players.find(players => { return players.uid == uid.toString() });
 
-              return { id, ...data as {} };
+          if (typeof newPlayer == 'undefined') {
+            const emptySlot = data.players.find(players => { return players.name == '' || players.name == null });
+            if (typeof emptySlot == 'undefined') {
+              return { ...data as {}, status: 'full'};
+            } else {
+              emptySlot.name = JSON.parse(localStorage.getItem('username'));
+              emptySlot.uid = uid;
+
+              newPlayerJoined = true;
             }
+          }
 
-            return {};
+          return { id, ...data as {}, newPlayer: newPlayerJoined };
+        }).filter(result => Object.keys(result).length > 0);
 
-          }).filter(result => Object.keys(result).length > 0);
-        })
-    );
+        return filteredData;
+      })
+    )
   }
 
-  updateRoom(players:object, room:string, id:string) {
+  deleteRoom(id:string){
+    return this.db.collection('rooms').doc(id).delete();
+  }
+
+  updateRoom(players:object, room:string, id:string, message = '') {
     return this.db.collection('rooms').doc(id).set({
-        key: room,
-        players: players
-      });
+      key: room,
+      players: players
+    }).then(function() {
+      console.log(message);
+    })
+    .catch(function(error) {
+      console.error('Error storing data:', error);
+    });
   }
+
 }

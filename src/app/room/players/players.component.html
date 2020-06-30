@@ -4,11 +4,17 @@
       <div class="wrap col-12">
         <div *ngIf="!pageNotFound" class="header-container">
            <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
-           <div class="game-status" id="game-status"><em> Waiting for players to ready up</em></div>
+           <div *ngIf="notReadyPlayersCount > 0; else ready" class="game-status">
+             <em class="text-danger"> Waiting for {{ notReadyPlayersCount }} player(s) to ready up!</em>
+            </div>
+            <ng-template #ready class="game-status">
+              <em class="text-success"> We can start now!</em>
+            </ng-template>
         </div>
 
         <div *ngIf="!pageNotFound; else notFound" class="players-container">
           <app-player
+            (changeColor)="changePlayerColor($event)"
             *ngFor="let playerEl of players; let i = index"
             [player]="playerEl" [index]="i">
           </app-player>
@@ -28,8 +34,8 @@
 <div class="row justify-content-center">
   <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
     <div class="btn-container text-center" id="buttons">
-      <button type="button" class="btn btn-warning ready">Ready Up</button>
-      <button type="button" class="btn btn-success start" disabled="disabled">Start Game</button>
+      <button type="button" class="btn btn-warning ready" (click)="playerReady(playerReadyBtn)">{{ !playerReadyBtn ? 'Ready Up' : 'Not ready'}}</button>
+      <button type="button" class="btn btn-success start" [disabled]="!startBtn">Start Game</button>
     </div>
   </div>
 </div>

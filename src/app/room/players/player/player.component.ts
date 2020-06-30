@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Player } from 'src/app/models/player.model';
 
 @Component({
@@ -9,14 +9,20 @@ import { Player } from 'src/app/models/player.model';
 export class PlayerComponent implements OnInit {
   @Input() player: Player;
   @Input() index: number;
+  @Output() changeColor = new EventEmitter();
+  user: string;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  changePlayerColor(color:string) {
+  changePlayerColor(color:string, event) {
+    const nameSpan = event.target.querySelector('span.name');
 
+    if (nameSpan != null && nameSpan.innerText === '') {
+      this.changeColor.emit(color);
+    }
   }
 
 }

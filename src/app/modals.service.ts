@@ -3,9 +3,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { NameModalComponent } from './modals/name-modal/name-modal.component';
 import { RoomModalComponent } from './modals/room-modal/room-modal.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class ModalsService {
+  hostOrJoin = new BehaviorSubject<string>('host');
 
   constructor(
     private modalService: NgbModal
@@ -29,6 +31,10 @@ export class ModalsService {
       centered: true,
       size: 'sm'
     });
+  }
+
+  close() {
+    this.modalService.dismissAll();
   }
 
 }

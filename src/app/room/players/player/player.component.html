@@ -1,8 +1,11 @@
 <div
-class="p-2 mb-2"
+class="p-2 mb-2 "
 [attr.data-color]="player.color"
-(click)="changePlayerColor(player.color)">
-  <span data-id="{{ index }}" >{{ player.name }}</span>
+(click)="changePlayerColor(player.color, $event)">
+  <span class="color"></span>
+  <span class="name" data-id="{{ index }}">{{ player.name }}
+    <!-- <img src="{{ player.name == user ? '/assets/images/host.png' : '' }}" class="myself" /> -->
+  </span>
   <span *ngIf="player.name">
     <span *ngIf="player.ready" class="ready float-right here"></span>
     <span *ngIf="!player.ready" class="not-ready float-right here"></span>

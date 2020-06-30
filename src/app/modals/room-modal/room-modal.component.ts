@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataStorageService } from 'src/app/data-storage.service';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-room-modal',
@@ -11,10 +10,10 @@ import { take } from 'rxjs/operators';
   styleUrls: ['../modals.component.scss'],
 })
 export class RoomModalComponent implements OnInit, OnDestroy {
-  room : string;
-  @ViewChild('close') close;
-  subscription: Subscription;
+  room: string;
+  nonExistingRoom: boolean = false;
   fullRoom: boolean = false;
+  fetchRoomSub: Subscription;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -27,27 +26,32 @@ export class RoomModalComponent implements OnInit, OnDestroy {
   }
 
   joinGame(room:string) {
-    this.subscription = this.dataStorage.addPlayersToRoom(room).pipe(take(1))
-      .subscribe((response) => {
-        const roomData:any = Object.assign({}, ...response);
+    this.fetchRoomSub = this.dataStorage.fetchRoom(room)
+    .subscribe(data =>  {
+      if (Object.keys(data).length === 0) {
+        this.nonExistingRoom = true;
+        return;
+      }
 
-        if (roomData.hasOwnProperty('status') && roomData.status == 'full') {
+      const roomData = Object.assign({}, ...data);
+
+      switch (roomData.status) {
+        case 'not-found':
+          this.nonExistingRoom = true;
+          break;
+        case 'full':
           this.fullRoom = true;
-        } else {
-          this.dataStorage.updateRoom(roomData.players, room, roomData.id)
-          .then(() => {
-            this.close.nativeElement.click();
-            this.router.navigate(['room', room], { relativeTo: this.route })
-          })
-          .catch(function(error) {
-            console.error("Error adding players to an existing room: ", error);
-          });
-        }
+          break;
+        default:
+          this.router.navigate(['/room', room]);
+      }
     });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.fetchRoomSub) {
+      this.fetchRoomSub.unsubscribe();
+    }
   }
 
 }

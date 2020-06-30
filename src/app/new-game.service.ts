@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { ModalsService } from './modals.service';
 import { Room } from './models/room.model';
 
 @Injectable({providedIn: 'root'})
 export class NewGameService {
-  gameChanged = new Subject<Room[]>();
+  gameChanged = new BehaviorSubject<any>(null);
   roomCode : string;
   game : Room[] = [];
   username : string;
@@ -22,6 +22,8 @@ export class NewGameService {
 
   storeName(username:string) {
     localStorage.setItem('username', JSON.stringify(username));
+    localStorage.setItem('uid', JSON.stringify(Date.now()));
+
     this.username = username;
     this.usernameStored.next(username);
   }
@@ -32,7 +34,7 @@ export class NewGameService {
 
   removeUsername() {
     this.router.navigate(['/']);
-    localStorage.removeItem('username');
+    localStorage.clear();
     this.usernameStored.next('');
   }
 
@@ -52,7 +54,7 @@ export class NewGameService {
   }
 
   checkIfUserLogged() {
-    if (this.username == null) {
+    if (JSON.parse(localStorage.getItem('username')) == null) {
       this.modalsService.open('enterName');
     }
   }

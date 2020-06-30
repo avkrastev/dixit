@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NewGameService } from '../new-game.service';
 import { ModalsService } from '../modals.service';
 import { DataStorageService } from '../data-storage.service';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-start',
@@ -36,19 +36,13 @@ export class StartComponent implements OnInit, OnDestroy {
     if (!this.username) {
       this.modalsService.open('enterName');
     } else {
-      const roomCode = this.newGameService.hostNewGame();
-      this.dataStorage.createNewRoom(roomCode)
-        .then(() => {
-          this.router.navigate(['room', roomCode], { relativeTo: this.route });
-        })
-        .catch(function(error) {
-          console.error("Error adding players to new room: ", error);
-        });
+      this.dataStorage.newGame();
     }
   }
 
   join() {
     const modal = !this.username ? 'enterName' : 'enterRoom';
+    this.modalsService.hostOrJoin.next('join');
     this.modalsService.open(modal);
   }
 
