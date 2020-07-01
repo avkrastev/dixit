@@ -10,7 +10,6 @@ export class PlayerComponent implements OnInit {
   @Input() player: Player;
   @Input() index: number;
   @Output() changeColor = new EventEmitter();
-  user: string;
 
   constructor() { }
 

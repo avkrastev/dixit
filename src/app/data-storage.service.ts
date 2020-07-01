@@ -24,14 +24,14 @@ export class DataStorageService {
     const uid = JSON.parse(localStorage.getItem('uid'));
 
     const playersArray = [
-      new Player(host, 'blue', false, 0, false, uid),
-      new Player('', 'green', false, 0, false, 0),
-      new Player('', 'red', false, 0, false, 0),
-      new Player('', 'yellow', false, 0, false, 0),
-      new Player('', 'lightblue', false, 0, false, 0),
-      new Player('', 'white', false, 0, false, 0),
-      new Player('', 'black', false, 0, false, 0),
-      new Player('', 'grey', false, 0, false, 0),
+      new Player(host, 'blue', false, 0, false, uid, true),
+      new Player('', 'green', false, 0, false, 0, false),
+      new Player('', 'red', false, 0, false, 0, false),
+      new Player('', 'yellow', false, 0, false, 0, false),
+      new Player('', 'lightblue', false, 0, false, 0, false),
+      new Player('', 'white', false, 0, false, 0, false),
+      new Player('', 'black', false, 0, false, 0, false),
+      new Player('', 'grey', false, 0, false, 0, false),
     ];
 
     const playersObj = playersArray.map((obj)=> {return Object.assign({}, obj)});

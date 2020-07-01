@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { ModalsService } from './modals.service';
 import { Room } from './models/room.model';
+import { Player } from './models/player.model';
 
 @Injectable({providedIn: 'root'})
 export class NewGameService {
@@ -57,6 +58,17 @@ export class NewGameService {
     if (JSON.parse(localStorage.getItem('username')) == null) {
       this.modalsService.open('enterName');
     }
+  }
+
+  resetPlayerFields(player:Player) {
+    player.name = '';
+    player.points = 0;
+    player.ready = false;
+    player.storyteller = false;
+    player.uid = 0;
+    player.host = false;
+
+    return player;
   }
 
 }

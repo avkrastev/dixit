@@ -10,7 +10,9 @@
           name="userName"
           maxlength="16"
           (keyup)="checkUsername($event)"
-          ngbAutofocus class="form-control"
+          (keydown.enter)="setUsername()"
+          ngbAutofocus
+          class="form-control"
           autocomplete="off" />
         <br>
         <button type="button" class="btn btn-light" #close (click)="activeModal.close()">Cancel</button>

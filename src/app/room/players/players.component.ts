@@ -12,12 +12,15 @@ import { DataStorageService } from 'src/app/data-storage.service';
   styleUrls: ['./players.component.scss']
 })
 export class PlayersComponent implements OnInit, OnDestroy {
-  pageNotFound: boolean = true;
+  pageNotFound: boolean = false;
+  loading: boolean = true;
   players: Room[];
   room: string;
   playerReadyBtn: boolean = false;
   startBtn: boolean = false;
   notReadyPlayersCount: number;
+  allPlayersCount: number;
+  hostPlayer: boolean = false;
   subscription : Subscription;
 
   constructor(
@@ -31,34 +34,49 @@ export class PlayersComponent implements OnInit, OnDestroy {
       this.route.params,
       this.dataStorage.playersPerRoom
     ).pipe(
-        filter(([params, players]) => players !== null),
+        //filter(([params, players]) => players !== null),
         map(([params, players]) => {
           if (params['key'] == '404') {
             this.pageNotFound = true;
           } else {
-            this.pageNotFound = false;
             this.room = params['key'];
             this.newGameService.checkIfUserLogged();
           }
-          return players;
+          return players || {};
         })
     ).subscribe(roomData => {
+      if (Object.keys(roomData).length <= 0) {
+        return;
+      }
+      this.loading = false;
       this.players = roomData.players;
 
       const uid = JSON.parse(localStorage.getItem('uid'));
       const ownPlayer = roomData.players.find(players => { return players.uid == uid.toString() });
+      const readyPlayers = roomData.players.filter(players => { return players.ready == true });
+      const notReadyPlayersCount = roomData.players.filter(players => { return players.name != '' && players.ready == false });
+      const allPlayersCount = roomData.players.filter(players => { return players.name != '' });
+      const hostPlayer = roomData.players.find(players => { return players.host });
 
       if (typeof ownPlayer !== 'undefined') {
         this.playerReadyBtn = ownPlayer.ready == true ? true : false;
       }
 
-      const readyPlayers = roomData.players.filter(players => { return players.ready == true });
-
-      if (readyPlayers.length > 2) {
-        this.startBtn = true;
+      if (typeof notReadyPlayersCount !== 'undefined') {
+        this.notReadyPlayersCount = notReadyPlayersCount.length;
       }
 
-      this.notReadyPlayersCount = roomData.players.filter(players => { return players.name != '' && players.ready == false }).length;
+      if (typeof allPlayersCount !== 'undefined') {
+        this.allPlayersCount = allPlayersCount.length;
+      }
+
+      if (typeof hostPlayer !== 'undefined') {
+        this.hostPlayer = hostPlayer.uid == uid ? true : false;
+      }
+
+      if (typeof readyPlayers !== 'undefined' && readyPlayers.length > 2 && this.allPlayersCount >= 3) {
+        this.startBtn = true;
+      }
     });
   }
 
@@ -66,6 +84,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     this.dataStorage.playersPerRoom
     .pipe(first())
     .subscribe(data => {
+      this.loading = false;
       const name = JSON.parse(localStorage.getItem('username'));
       const uid = JSON.parse(localStorage.getItem('uid'));
       const ownPlayer = data.players.find(players => { return players.uid == uid.toString() });
@@ -73,12 +92,12 @@ export class PlayersComponent implements OnInit, OnDestroy {
       if (typeof ownPlayer !== 'undefined') {
         const newColorSlot = data.players.find(players => { return players.color == color });
         if (typeof newColorSlot !== 'undefined') {
-          ownPlayer.name = '';
-          ownPlayer.uid = 0;
-
           newColorSlot.name = name;
           newColorSlot.uid = uid;
+          newColorSlot.host = ownPlayer.host;
           newColorSlot.ready = ownPlayer.ready;
+
+          this.newGameService.resetPlayerFields(ownPlayer);
         }
         const message = 'Player ' + newColorSlot.name + ' changed its color to ' + color + '!';
         this.dataStorage.updateRoom(data.players, data.key, data.id, message);
@@ -93,6 +112,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
     this.dataStorage.playersPerRoom
     .pipe(first())
     .subscribe(data => {
+      this.loading = false;
       const uid = JSON.parse(localStorage.getItem('uid'));
       const ownPlayer = data.players.find(players => { return players.uid == uid.toString() });
 

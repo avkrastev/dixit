@@ -13,6 +13,7 @@ import { ModalsService } from '../modals.service';
 })
 export class RoomComponent implements OnInit, OnDestroy {
   navbarCollapsed:boolean = true;
+
   @ViewChild('playersComponent') playersComponent: any;
   leaveGameSub: Subscription;
   fetchRoomSub: Subscription;
@@ -38,7 +39,8 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.fetchRoomSub = this.dataStorage.fetchRoom(room)
       .subscribe(result =>  {
         if (Object.keys(result).length === 0) {
-          return { status: 'not-found'};
+          this.router.navigate(['/room/404']);
+          return;
         }
 
         const roomData = Object.assign({}, ...result);
@@ -70,12 +72,24 @@ export class RoomComponent implements OnInit, OnDestroy {
         const playerToRemove = data.players.find(players => { return players.uid == uid.toString() });
 
         if (typeof playerToRemove != 'undefined') {
-          playerToRemove.name = '';
-          playerToRemove.uid = 0;
-          // TODO reset other fields
+          const playersLeft = data.players.find(players => { return players.name != '' && players.name != playerToRemove.name });
+          let method = 'deleteRoom';
 
-          const message = 'One player left!';
-          this.dataStorage.updateRoom(data.players, room, data.id, message);
+          if (typeof playersLeft != 'undefined') {
+            if (playerToRemove.host) {
+              playersLeft.host = true;
+            }
+            method = 'updateRoom';
+          }
+
+          this.newGameService.resetPlayerFields(playerToRemove);
+
+          if (method == 'updateRoom') {
+            const message = 'One player left!';
+            this.dataStorage.updateRoom(data.players, room, data.id, message);
+          } else {
+            this.dataStorage.deleteRoom(data.id);
+          }
 
           if (logout) {
             this.newGameService.removeUsername();

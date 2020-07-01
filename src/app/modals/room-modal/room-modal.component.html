@@ -15,9 +15,11 @@
           type="text"
           name="userName"
           maxlength="5"
-          ngbAutofocus class="form-control"
+          ngbAutofocus
+          class="form-control"
           autocomplete="off"
           placeholder="AFGEJ"
+          (keydown.enter)="joinGame($event.target.value)"
           #room />
         <br>
         <button type="button" class="btn btn-light" #close (click)="activeModal.close()">Cancel</button>

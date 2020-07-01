@@ -2,42 +2,60 @@
   <div class="row justify-content-center">
      <div class="players-wrapper col-sm-8 col-md-6 col-lg-5 col-xl-4">
       <div class="wrap col-12">
-        <div *ngIf="!pageNotFound" class="header-container">
-           <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
-           <div *ngIf="notReadyPlayersCount > 0; else ready" class="game-status">
-             <em class="text-danger"> Waiting for {{ notReadyPlayersCount }} player(s) to ready up!</em>
-            </div>
-            <ng-template #ready class="game-status">
-              <em class="text-success"> We can start now!</em>
-            </ng-template>
-        </div>
-
-        <div *ngIf="!pageNotFound; else notFound" class="players-container">
-          <app-player
-            (changeColor)="changePlayerColor($event)"
-            *ngFor="let playerEl of players; let i = index"
-            [player]="playerEl" [index]="i">
-          </app-player>
-        </div>
-
-        <ng-template #notFound>
-          <div class="players-container not-found">
-            <h5 class="text-center white">Sorry!</h5>
-            <h5 class="text-center white">The page was not found.</h5>
+        <div class="card-wrapper">
+          <div *ngIf="loading" class="blobs-container">
+            <div class="blob blue"></div>
+            <div class="blob green"></div>
+            <div class="blob red"></div>
+            <div class="blob yellow"></div>
+            <div class="blob lightblue"></div>
+            <div class="blob white"></div>
+            <div class="blob"></div>
+            <div class="blob grey"></div>
           </div>
-       </ng-template>
+          <div *ngIf="!pageNotFound && !loading" class="header-container">
+            <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
+             <div *ngIf="notReadyPlayersCount > 0" class="game-status">
+              <em class="text-danger">Waiting for {{ notReadyPlayersCount }} player(s) to ready up!</em>
+             </div>
+             <div *ngIf="notReadyPlayersCount == 0 && allPlayersCount < 3" class="game-status">
+               <em class="text-danger">We need at least 3 people to start!</em>
+             </div>
+             <div *ngIf="notReadyPlayersCount == 0 && allPlayersCount >= 3" class="game-status">
+               <em class="text-success">We can start now!</em>
+             </div>
+             <small>Change your color by clicking on an empty slot.</small>
+         </div>
+
+         <div *ngIf="!pageNotFound; else notFound" class="players-container">
+           <app-player
+             (changeColor)="changePlayerColor($event)"
+             *ngFor="let playerEl of players; let i = index"
+             [player]="playerEl" [index]="i">
+           </app-player>
+         </div>
+
+         <ng-template #notFound>
+           <div class="players-container not-found">
+             <h5 class="text-center white">Sorry!</h5>
+             <h5 class="text-center white">The page was not found.</h5>
+           </div>
+        </ng-template>
+        </div>
      </div>
     </div>
    </div>
 </div>
-<div *ngIf="!pageNotFound" class="container">
+<div *ngIf="!pageNotFound && !loading" class="container">
 <div class="row justify-content-center">
   <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
     <div class="btn-container text-center" id="buttons">
       <button type="button" class="btn btn-warning ready" (click)="playerReady(playerReadyBtn)">{{ !playerReadyBtn ? 'Ready Up' : 'Not ready'}}</button>
-      <button type="button" class="btn btn-success start" [disabled]="!startBtn">Start Game</button>
+      <button *ngIf="hostPlayer" type="button" class="btn btn-success start" [disabled]="!startBtn">Start Game</button>
     </div>
   </div>
 </div>
 </div>
+
+
 

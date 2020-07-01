@@ -4,7 +4,7 @@ class="p-2 mb-2 "
 (click)="changePlayerColor(player.color, $event)">
   <span class="color"></span>
   <span class="name" data-id="{{ index }}">{{ player.name }}
-    <!-- <img src="{{ player.name == user ? '/assets/images/host.png' : '' }}" class="myself" /> -->
+    <img src="{{ player.host ? '/assets/images/shield.png' : '' }}" witdth="16" height="16" class="myself" />
   </span>
   <span *ngIf="player.name">
     <span *ngIf="player.ready" class="ready float-right here"></span>
