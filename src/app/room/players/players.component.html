@@ -50,8 +50,20 @@
 <div class="row justify-content-center">
   <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
     <div class="btn-container text-center" id="buttons">
-      <button type="button" class="btn btn-warning ready" (click)="playerReady(playerReadyBtn)">{{ !playerReadyBtn ? 'Ready Up' : 'Not ready'}}</button>
-      <button *ngIf="hostPlayer" type="button" class="btn btn-success start" [disabled]="!startBtn">Start Game</button>
+      <button
+        type="button"
+        class="btn btn-warning ready"
+        (click)="playerReady(playerReadyBtn)">
+          {{ !playerReadyBtn ? 'Ready Up' : 'Not ready'}}
+      </button>
+      <button
+        *ngIf="hostPlayer"
+        type="button"
+        class="btn btn-success start"
+        (click)="startGame()"
+        [disabled]="!startBtn">
+          Start Game
+      </button>
     </div>
   </div>
 </div>

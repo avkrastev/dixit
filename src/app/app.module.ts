@@ -15,6 +15,9 @@ import { PlayerComponent } from './room/players/player/player.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
+import { GameComponent } from './room/game/game.component';
+import { HeaderComponent } from './header/header.component';
+import { TellStoryComponent } from './modals/tell-story/tell-story.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { environment } from '../environments/environment';
     StartComponent,
     PlayersComponent,
     PlayerComponent,
+    GameComponent,
+    HeaderComponent,
+    TellStoryComponent,
   ],
   imports: [
     BrowserModule,

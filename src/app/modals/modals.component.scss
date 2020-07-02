@@ -1,6 +1,16 @@
 .modal-body button {
   margin: 0px 5px;
-  }
-  input {
+}
+input {
   text-align: center;
-  }
+}
+input[name="tale"] {
+  text-align: left;
+}
+img.card {
+  width: auto;
+  height: 350px;
+  background-size: cover;
+  object-fit: cover;
+  margin: 0 auto;
+}

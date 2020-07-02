@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NewGameService } from 'src/app/new-game.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, combineLatest } from 'rxjs';
 import { Room } from 'src/app/models/room.model';
 import { map, filter, first } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
   constructor(
     private newGameService: NewGameService,
     private dataStorage: DataStorageService,
+    private router: Router,
     private route: ActivatedRoute,
   ) { }
 
@@ -125,6 +126,36 @@ export class PlayersComponent implements OnInit, OnDestroy {
         this.dataStorage.playersPerRoom.next(data);
       }
     })
+  }
+
+  startGame() {
+    this.dataStorage.playersPerRoom
+      .pipe(first())
+      .subscribe(roomData =>  {
+        const allPlayers = roomData.players.filter(players => { return players.name != '' });
+
+        let min = 0;
+        let max = 114;
+        let allCards = Array.from(Array(115), (_, i) => i + 1);
+
+        for (let player in allPlayers) {
+          let cardsPerPlayer = [];
+          for (let j = 0; j < 6; j++) {
+            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            cardsPerPlayer.push(allCards[randomNumber]);
+            allCards.splice(randomNumber, 1);
+            max--;
+          }
+
+          allPlayers[player].cards = { ...cardsPerPlayer };
+        }
+
+        const message = 'First round started!';
+        this.dataStorage.updateRoom(roomData.players, roomData.key, roomData.id, message, { ...allCards }, 1);
+        this.router.navigate(['round/1'], {relativeTo: this.route});
+
+        // emit event for redirect other players
+    });
   }
 
   ngOnDestroy() {

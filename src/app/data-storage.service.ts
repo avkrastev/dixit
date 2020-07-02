@@ -24,7 +24,8 @@ export class DataStorageService {
     const uid = JSON.parse(localStorage.getItem('uid'));
 
     const playersArray = [
-      new Player(host, 'blue', false, 0, false, uid, true),
+      //new Player(name, color, ready, points, storyteller, uid, host),
+      new Player(host, 'blue', false, 0, true, uid, true),
       new Player('', 'green', false, 0, false, 0, false),
       new Player('', 'red', false, 0, false, 0, false),
       new Player('', 'yellow', false, 0, false, 0, false),
@@ -89,14 +90,50 @@ export class DataStorageService {
     )
   }
 
+  fetchPlayerData(room:string) {
+    const username = JSON.parse(localStorage.getItem('username'));
+    const uid = JSON.parse(localStorage.getItem('uid'));
+
+    return this.db.collection('rooms', ref => ref.where('key', '==', room)).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data:any = a.payload.doc.data();
+
+          const player = data.players.find(players => { return players.uid == uid.toString() && players.name == username });
+          const storyTeller = data.players.find(players => { return players.storyteller == true });
+          const listeners = data.players.filter(players => { return players.storyteller == false && players.name != ''});
+
+          if (typeof player == 'undefined') {
+            return { status: 'not-found'};
+          }
+
+          return { ...player, teller: storyTeller.name, storyText: data.story, listeners: listeners };
+        });
+      })
+    )
+  }
+
   deleteRoom(id:string){
     return this.db.collection('rooms').doc(id).delete();
   }
 
-  updateRoom(players:object, room:string, id:string, message = '') {
+  updateRoom(players:object, room:string, id:string, message = '', remainingCards = {}, round = 0) {
     return this.db.collection('rooms').doc(id).set({
       key: room,
-      players: players
+      players: players,
+      remainingCards: remainingCards,
+      round: round
+    }).then(function() {
+      console.log(message);
+    })
+    .catch(function(error) {
+      console.error('Error storing data:', error);
+    });
+  }
+
+  updateRoom2(data, message = '') {
+    return this.db.collection('rooms').doc(data.id).set({
+      ...data
     }).then(function() {
       console.log(message);
     })

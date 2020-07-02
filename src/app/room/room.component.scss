@@ -4,6 +4,7 @@
 div.room::after {
   content: "";
   background: url('/assets/images/dixit-room.jpg') rgba(43, 51, 136) center center no-repeat;
+  filter: grayscale(100%);
   opacity: 0.85;
   top: 0;
   left: 0;
@@ -16,9 +17,7 @@ div.room::after {
   -o-background-size: cover;
   background-size: cover;
 }
-img.main {
-  max-height: 30px;
-}
+
 
 
 

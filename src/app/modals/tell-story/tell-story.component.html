@@ -1,0 +1,23 @@
+<div class="modal-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img class="card" src="/assets/images/cards/{{ selectedCard }}.png" alt="Dixit card">
+        <blockquote class="blockquote">
+          <p class="mb-0">You can write it down and the other players will see it <br> or you can leave it blank and tell the story in a call</p>
+        </blockquote>
+        <input
+          type="text"
+          name="tale"
+          ngbAutofocus
+          class="form-control"
+          #tale
+          (keydown.enter)="tellStory($event.target.value)"
+          autocomplete="off" />
+        <br>
+        <button type="button" class="btn btn-light" #close (click)="activeModal.close()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="tellStory(tale.value)">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

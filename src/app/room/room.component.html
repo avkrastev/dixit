@@ -1,37 +1,7 @@
 
 <div class="room">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">
-        <img src="../../assets/images/big-logo.png" class="d-inline-block align-top main" alt="">
-      </a>
-      <button class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation" (click)="toggleNavbarCollapsing()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse" [class.collapse]="navbarCollapsed" id="navbarNav">
-        <ul class="navbar-nav mr-auto"></ul>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" (click)="leaveGame()">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.dixit.com/">Rules</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="https://www.buymeacoffee.com/">Donate</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" (click)="leaveGame(true)">Log out</a>
-            </li>
-        </ul>
-    </div>
-  </nav>
-  <app-players #playersComponent></app-players>
+  <app-header></app-header>
+  <app-players></app-players>
 </div>
 
 <ng-template #enterNameModal let-modal></ng-template>

@@ -1,0 +1,55 @@
+<div class="room">
+  <app-header></app-header>
+  <div *ngIf="waitingForTale && !storyteller" class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4 text-center">Waiting for {{ storytellerName }} to tell us a story... </h1>
+    </div>
+  </div>
+  <div *ngIf="!waitingForTale" class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        <div *ngFor="let playerEl of players; let i = index">
+          <div class="blob {{ playerEl.color }} float-left"></div>
+          <span>{{ playerEl.name }} </span>
+        </div>
+        <div>
+          <div class="blob red ready float-left"></div>
+          <span>Test</span>
+        </div>
+      </div>
+      <h1 class="display-4 text-center">The story: "{{ storyText }}"</h1>
+    </div>
+  </div>
+  <div class="card-deck-wrapper">
+    <div class="card-deck">
+      <div
+        class="card"
+        *ngFor="let card of cards | keyvalue">
+        <img class="card-img-top" src="/assets/images/cards/{{ card.value }}.png" alt="Dixit card">
+        <div class="card-body text-center">
+          <button
+            *ngIf="storyteller"
+            [disabled]="cardsCount < 6"
+            type="button"
+            (click)="tellStory(card.value)"
+            class="btn btn-warning">
+              Tell a story
+          </button>
+          <button
+            *ngIf="!storyteller"
+            [disabled]="waitingForTale"
+            type="button"
+            (click)="listenerCardChoice(card.value)"
+            class="btn btn-warning">
+            I fit the most
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #tellStoryModal let-modal></ng-template>
+
+
+
