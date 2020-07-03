@@ -3,7 +3,7 @@ import { NewGameService } from 'src/app/new-game.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, combineLatest } from 'rxjs';
 import { Room } from 'src/app/models/room.model';
-import { map, filter, first } from 'rxjs/operators';
+import { map, filter, first, tap } from 'rxjs/operators';
 import { DataStorageService } from 'src/app/data-storage.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = combineLatest(
       this.route.params,
-      this.dataStorage.playersPerRoom
+      this.dataStorage.playersPerRoom,
     ).pipe(
         //filter(([params, players]) => players !== null),
         map(([params, players]) => {
@@ -49,6 +49,12 @@ export class PlayersComponent implements OnInit, OnDestroy {
       if (Object.keys(roomData).length <= 0) {
         return;
       }
+
+      if (roomData.gameStarted) {
+        this.router.navigate(['round/'+roomData.round], {relativeTo: this.route});
+        return;
+      }
+
       this.loading = false;
       this.players = roomData.players;
 
@@ -101,7 +107,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
           this.newGameService.resetPlayerFields(ownPlayer);
         }
         const message = 'Player ' + newColorSlot.name + ' changed its color to ' + color + '!';
-        this.dataStorage.updateRoom(data.players, data.key, data.id, message);
+        this.dataStorage.updateRoom({...data}, message);
 
         this.newGameService.setPlayersPerRoom(data.players); // TODO check if this is needed
         this.dataStorage.playersPerRoom.next(data);
@@ -120,7 +126,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
       if (typeof ownPlayer !== 'undefined') {
         ownPlayer.ready = !ready;
         const message = !ready ? 'Player ' + ownPlayer.name +' is ready!' : 'Player ' + ownPlayer.name +' is not ready!';
-        this.dataStorage.updateRoom(data.players, data.key, data.id, message);
+        this.dataStorage.updateRoom({ ...data }, message);
 
         this.newGameService.setPlayersPerRoom(data.players); // TODO check if this is needed
         this.dataStorage.playersPerRoom.next(data);
@@ -150,11 +156,12 @@ export class PlayersComponent implements OnInit, OnDestroy {
           allPlayers[player].cards = { ...cardsPerPlayer };
         }
 
-        const message = 'First round started!';
-        this.dataStorage.updateRoom(roomData.players, roomData.key, roomData.id, message, { ...allCards }, 1);
-        this.router.navigate(['round/1'], {relativeTo: this.route});
+        roomData.remainingCards = { ...allCards };
+        roomData.gameStarted = true;
+        roomData.round = 1;
 
-        // emit event for redirect other players
+        const message = 'First round started!';
+        this.dataStorage.updateRoom({ ...roomData }, message);
     });
   }
 

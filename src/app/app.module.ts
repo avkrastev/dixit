@@ -18,6 +18,8 @@ import { environment } from '../environments/environment';
 import { GameComponent } from './room/game/game.component';
 import { HeaderComponent } from './header/header.component';
 import { TellStoryComponent } from './modals/tell-story/tell-story.component';
+import { ConfirmComponent } from './modals/confirm/confirm.component';
+import { RoundComponent } from './room/game/round/round.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { TellStoryComponent } from './modals/tell-story/tell-story.component';
     GameComponent,
     HeaderComponent,
     TellStoryComponent,
+    ConfirmComponent,
+    RoundComponent,
   ],
   imports: [
     BrowserModule,

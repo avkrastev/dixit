@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player } from './models/player.model';
 import { NewGameService } from 'src/app/new-game.service';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Room } from './models/room.model';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -40,7 +40,8 @@ export class DataStorageService {
     return this.db.collection('rooms').add(
       {
         key: room,
-        players: playersObj
+        players: playersObj,
+        gameStarted: false
       }
     );
   }
@@ -72,8 +73,11 @@ export class DataStorageService {
 
           if (typeof newPlayer == 'undefined') {
             const emptySlot = data.players.find(players => { return players.name == '' || players.name == null });
+
             if (typeof emptySlot == 'undefined') {
               return { ...data as {}, status: 'full'};
+            } else if (data.gameStarted) {
+              return { ...data as {}, status: 'game-started', newPlayer: newPlayerJoined };
             } else {
               emptySlot.name = JSON.parse(localStorage.getItem('username'));
               emptySlot.uid = uid;
@@ -83,6 +87,20 @@ export class DataStorageService {
           }
 
           return { id, ...data as {}, newPlayer: newPlayerJoined };
+        }).filter(result => Object.keys(result).length > 0);
+
+        return filteredData;
+      })
+    )
+  }
+
+  fetchStartedGame(room:string) {
+    return this.db.collection('rooms', ref => ref.where('key', '==', room).where('gameStarted', '==', true)).snapshotChanges().pipe(
+      map(actions => {
+        const filteredData = actions.map(a => {
+          const data:any = a.payload.doc.data();
+
+          return { ...data as {} };
         }).filter(result => Object.keys(result).length > 0);
 
         return filteredData;
@@ -106,8 +124,8 @@ export class DataStorageService {
           if (typeof player == 'undefined') {
             return { status: 'not-found'};
           }
-
-          return { ...player, teller: storyTeller.name, storyText: data.story, listeners: listeners };
+console.log(data);
+          return { ...player, teller: storyTeller.name, storyText: data.story, listeners: listeners, roundDeck: data.selectedCards };
         });
       })
     )
@@ -117,21 +135,7 @@ export class DataStorageService {
     return this.db.collection('rooms').doc(id).delete();
   }
 
-  updateRoom(players:object, room:string, id:string, message = '', remainingCards = {}, round = 0) {
-    return this.db.collection('rooms').doc(id).set({
-      key: room,
-      players: players,
-      remainingCards: remainingCards,
-      round: round
-    }).then(function() {
-      console.log(message);
-    })
-    .catch(function(error) {
-      console.error('Error storing data:', error);
-    });
-  }
-
-  updateRoom2(data, message = '') {
+  updateRoom(data, message = '') {
     return this.db.collection('rooms').doc(data.id).set({
       ...data
     }).then(function() {

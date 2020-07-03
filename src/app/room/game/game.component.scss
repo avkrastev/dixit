@@ -47,6 +47,12 @@ div.room::after {
   width: 75px;
   display: inline-block;
 }
+div.points {
+  font-size: 14px;
+  text-align: center;
+  position: relative;
+  top: -18px;
+}
 @media only screen and (max-width: 600px) {
   .blob ~ span {
     font-size: 11px;

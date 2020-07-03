@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
 
     const uid = JSON.parse(localStorage.getItem('uid'));
 
-    if (typeof room == 'undefined') {
+    if (typeof room == 'undefined' || room == 404) {
       this.router.navigate(['/']);
       if (logout) {
         this.newGameService.removeUsername();
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
     this.leaveGameSub = this.dataStorage.fetchRoom(room).subscribe(
       data => {
         if (Object.keys(data).length === 0) {
-          this.router.navigate(['/room/404']);
+          this.router.navigate(['/']);
           return;
         }
 
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
 
           if (method == 'updateRoom') {
             const message = 'One player left!';
-            this.dataStorage.updateRoom(roomData.players, room, roomData.id, message);
+            this.dataStorage.updateRoom({ ...roomData }, message);
           } else {
             this.dataStorage.deleteRoom(roomData.id);
           }

@@ -1,24 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalsService } from 'src/app/modals.service';
-import { DataStorageService } from 'src/app/data-storage.service';
 import { Router } from '@angular/router';
+import { DataStorageService } from 'src/app/data-storage.service';
 import { first } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-tell-story',
-  templateUrl: './tell-story.component.html',
+  selector: 'app-confirm',
+  templateUrl: './confirm.component.html',
   styleUrls: ['../modals.component.scss']
 })
-export class TellStoryComponent implements OnInit {
+export class ConfirmComponent implements OnInit {
   selectedCard:number;
   @ViewChild('close') close;
 
   constructor(
     public activeModal: NgbActiveModal,
     private modalsService: ModalsService,
-    private dataStore: DataStorageService,
-    private router: Router
+    private router: Router,
+    private dataStore: DataStorageService
   )
   { }
 
@@ -30,7 +30,7 @@ export class TellStoryComponent implements OnInit {
     );
   }
 
-  tellStory(story) {
+  selectCard(card) {
     let currentURL = this.router.url.split('/');
     let roomParamIndex = currentURL.findIndex(element => {return element == 'room'});
     const uid = JSON.parse(localStorage.getItem('uid'));
@@ -40,14 +40,15 @@ export class TellStoryComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
         const roomData = Object.assign({}, ...data);
-        const selectedCards = { [uid]: this.selectedCard };
+        const selectedCards = { ...roomData.selectedCards, [uid]: card };
 
-        const storyTeller = roomData.players.find(players => { return players.storyteller == true });
-        const cardsIndex = Object.keys(storyTeller.cards).find(key => storyTeller.cards[key] === this.selectedCard);
-        delete storyTeller.cards[cardsIndex];
+        const player = roomData.players.find(players => { return players.uid == uid.toString() });
+        const cardsIndex = Object.keys(player.cards).find(key => player.cards[key] === this.selectedCard);
+        delete player.cards[cardsIndex];
+        player.roundFinished = true;
 
-        const message = 'The story has been told.';
-        this.dataStore.updateRoom({ ...roomData, selectedCards, story: story}, message);
+        const message = player.name+' has selected a card.';
+        this.dataStore.updateRoom({ ...roomData, selectedCards, story: roomData.story}, message);
       });
     }
 

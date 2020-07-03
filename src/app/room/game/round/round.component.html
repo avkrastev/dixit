@@ -1,0 +1,25 @@
+<div class="room">
+  <app-header></app-header>
+  <div class="card-deck-wrapper">
+    <div class="card-deck">
+      <div
+        class="card"
+        *ngFor="let card of cards | keyvalue">
+        <img class="card-img-top" src="/assets/images/cards/{{ card.value }}.png" alt="Dixit card">
+        <div class="card-body text-center">
+          <div *ngIf="card.value == myVote" class="blob red"></div>
+          <button
+            *ngIf="!voted"
+            type="button"
+            class="btn btn-warning"
+            (click)="finalCard(card)">
+            This is the card
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

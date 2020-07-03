@@ -4,7 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NameModalComponent } from './modals/name-modal/name-modal.component';
 import { RoomModalComponent } from './modals/room-modal/room-modal.component';
 import { TellStoryComponent } from './modals/tell-story/tell-story.component';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { ConfirmComponent } from './modals/confirm/confirm.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class ModalsService {
@@ -25,6 +26,9 @@ export class ModalsService {
         break;
       case 'enterRoom':
         modalComponent = RoomModalComponent;
+        break;
+      case 'confirm':
+        modalComponent = ConfirmComponent;
         break;
       case 'tellStory':
         modalComponent = TellStoryComponent;

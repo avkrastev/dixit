@@ -1,0 +1,15 @@
+<div class="modal-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <img class="card" src="/assets/images/cards/{{ selectedCard }}.png" alt="Dixit card">
+        <blockquote class="blockquote">
+          <p class="mb-0">Are you sure about this card?</p>
+        </blockquote>
+        <br>
+        <button type="button" class="btn btn-light" #close (click)="activeModal.close()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="selectCard(selectedCard)">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

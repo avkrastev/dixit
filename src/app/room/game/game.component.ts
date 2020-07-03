@@ -15,11 +15,12 @@ export class GameComponent implements OnInit, OnDestroy {
   fetchRoomSub: Subscription;
   cards: any;
   cardsCount: number;
-  storyteller: boolean;
+  storyteller: boolean = false;
   storytellerName: string;
   waitingForTale: boolean = true;
   storyText: string;
   players: any;
+  status: string = '';
 
   constructor(
     private modalsService: ModalsService,
@@ -30,23 +31,50 @@ export class GameComponent implements OnInit, OnDestroy {
   { }
 
   ngOnInit(): void {
-    const room: string = this.route.snapshot.params['key'];
+    const room = this.route.snapshot.params['key'];
+    if (room == 404) {
+      this.router.navigate(['/room/404']);
+    }
 
-    this.dataStorage.fetchPlayerData(room).subscribe(
-      player => {
-        // TODO status check (not found)
-        const playerData = Object.assign({}, ...player);
+    this.dataStorage.fetchStartedGame(room).subscribe(
+      data => {
+        const roomData = Object.assign({}, ...data);
+        const username = JSON.parse(localStorage.getItem('username'));
+        const uid = JSON.parse(localStorage.getItem('uid'));
 
-        this.cards = playerData.cards;
-        this.cardsCount = Object.keys(playerData.cards).length;
-        this.storyteller = playerData.storyteller;
-        this.storytellerName = playerData.teller;
+        const player = roomData.players.find(players => { return players.uid == uid.toString() && players.name == username });
 
-        if (typeof playerData.storyText != 'undefined') {
-          this.storyText = playerData.storyText;
+        if (typeof player == 'undefined') {
+          this.status = 'This game has already been started!';
+          // TODO Pass data to 404 or another route?
+          this.router.navigate(['/room/404']);
+          return;
+        }
+
+        const storyTeller = roomData.players.find(players => { return players.storyteller == true });
+        const listeners = roomData.players.filter(players => { return players.storyteller == false && players.name != ''});
+
+        if (typeof roomData.selectedCards != 'undefined' && Object.keys(listeners).length + 1 == Object.keys(roomData.selectedCards).length) {
+          this.router.navigate(['finish'], {relativeTo: this.route});
+          return;
+        }
+
+        this.cards = player.cards;
+        this.storytellerName = storyTeller.name;
+
+        if (storyTeller.uid == uid) {
+          this.storyteller = storyTeller.storyteller;
+        }
+
+        if (typeof roomData.cards != 'undefined') {
+          this.cardsCount = Object.keys(roomData.cards).length;
+        }
+
+        if (typeof roomData.story != 'undefined') {
+          this.storyText = roomData.story;
           this.waitingForTale = false;
         }
-        this.players = playerData.listeners;
+        this.players = listeners;
       }
     );
   }
@@ -57,7 +85,9 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   listenerCardChoice(card) {
-    console.log(card);
+    // TODO should I use other subject?
+    this.modalsService.selectedCard.next(card);
+    this.modalsService.open('confirm');
   }
 
   ngOnDestroy() {

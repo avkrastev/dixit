@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NewGameService } from '../new-game.service';
 import { DataStorageService } from '../data-storage.service';
 import { Subscription } from 'rxjs';
@@ -43,8 +43,15 @@ export class RoomComponent implements OnInit, OnDestroy {
         const roomData = Object.assign({}, ...result);
 
         if (roomData.newPlayer) {
+          console.log(roomData);
+          if (roomData.hasOwnProperty('status')) {
+            if (roomData.status == 'game-started') {
+              this.router.navigate(['room/404']);
+              return;
+            }
+          }
           const message = 'New player joined!';
-          this.dataStorage.updateRoom(roomData.players, room, roomData.id, message);
+          this.dataStorage.updateRoom({ ...roomData }, message);
         }
 
         this.newGameService.setPlayersPerRoom(roomData.players);
