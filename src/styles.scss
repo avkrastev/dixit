@@ -208,3 +208,26 @@ button:focus, button:active {
 	}
 }
 
+@keyframes pulse-transparent {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 transparent;
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px transparent;
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 transparent;
+	}
+}
+
+.blob.transparent {
+	background: transparent;
+	box-shadow: 0 0 0 0 transparent;
+	animation: pulse-grey 2s infinite;
+}
+

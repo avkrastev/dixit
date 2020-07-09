@@ -108,29 +108,6 @@ export class DataStorageService {
     )
   }
 
-  fetchPlayerData(room:string) {
-    const username = JSON.parse(localStorage.getItem('username'));
-    const uid = JSON.parse(localStorage.getItem('uid'));
-
-    return this.db.collection('rooms', ref => ref.where('key', '==', room)).snapshotChanges().pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data:any = a.payload.doc.data();
-
-          const player = data.players.find(players => { return players.uid == uid.toString() && players.name == username });
-          const storyTeller = data.players.find(players => { return players.storyteller == true });
-          const listeners = data.players.filter(players => { return players.storyteller == false && players.name != ''});
-
-          if (typeof player == 'undefined') {
-            return { status: 'not-found'};
-          }
-console.log(data);
-          return { ...player, teller: storyTeller.name, storyText: data.story, listeners: listeners, roundDeck: data.selectedCards };
-        });
-      })
-    )
-  }
-
   deleteRoom(id:string){
     return this.db.collection('rooms').doc(id).delete();
   }

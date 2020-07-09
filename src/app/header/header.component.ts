@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NewGameService } from '../new-game.service';
 import { DataStorageService } from '../data-storage.service';
+import { ModalsService } from '../modals.service';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit {
     private route: ActivatedRoute,
     private newGameService: NewGameService,
     private dataStorage: DataStorageService,
+    private modalsService: ModalsService
   )
   { }
 
@@ -79,6 +81,10 @@ export class HeaderComponent implements OnInit {
         }
       }
     );
+  }
+
+  rules() {
+    this.modalsService.open('rules');
   }
 
   ngOnDestroy() {

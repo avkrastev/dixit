@@ -18,8 +18,16 @@ div.room::after {
   background-size: cover;
 }
 .card-deck-wrapper {
-  padding: 20px;
+  margin: 20px;
+  .card-deck {
+    margin-bottom: 20px;
+  }
+  .card-body {
+    line-height: 40px;
+    padding: 0.5rem;
+  }
 }
+
 .card-img-top {
   height: 450px;
   background-size: cover;
@@ -27,4 +35,45 @@ div.room::after {
 }
 .card {
   background-color: rgba(255,255,255,0.5);
+}
+
+.leaderboard {
+  background-color: rgba(255,255,255,0.8);
+  max-width: 640px;
+  margin: 20px auto;
+  .players div {
+    display:inline-block;
+  }
+  table td {
+    vertical-align: middle;
+    padding: 0px;
+  }
+}
+
+.jumbotron {
+  padding: 2rem 1rem;
+  margin-bottom: 0;
+}
+
+.blob ~ span {
+  line-height: 40px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 75px;
+  display: inline-block;
+}
+
+div.points {
+  font-size: 14px;
+  text-align: center;
+  position: relative;
+  top: -18px;
+}
+@media only screen and (max-width: 600px) {
+  .blob ~ span {
+    font-size: 11px;
+    width: 45px;
+  }
 }

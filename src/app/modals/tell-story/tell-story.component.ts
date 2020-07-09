@@ -40,7 +40,7 @@ export class TellStoryComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
         const roomData = Object.assign({}, ...data);
-        const selectedCards = { [uid]: this.selectedCard };
+        const selectedCards = { [uid]: { 'card': this.selectedCard }};
 
         const storyTeller = roomData.players.find(players => { return players.storyteller == true });
         const cardsIndex = Object.keys(storyTeller.cards).find(key => storyTeller.cards[key] === this.selectedCard);

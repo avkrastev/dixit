@@ -1,24 +1,96 @@
 <div class="room">
   <app-header></app-header>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        <div *ngFor="let player of players;">
+          <div class="blob {{ player.color }} float-left"></div>
+          <span>{{ player.name }} </span>
+          <div class="points">({{ player.points }} p.) </div>
+        </div>
+      </div>
+      <div *ngIf="loading" class="text-center">
+        Waiting for the rest of the players to choose a card...
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="leaderBoardShown" class="leaderboard table-responsive">
+    <table class="table table-striped">
+      <tbody>
+        <tr *ngFor="let number of leaderboard; let k = index">
+          <td scope="row">
+            <div class="text-center"><strong>{{ k }}</strong></div>
+            <div class="players text-center">
+              <div *ngFor="let player of players;">
+                <div *ngIf="player.points == k" class="blob {{ player.color }}"></div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+
   <div class="card-deck-wrapper">
     <div class="card-deck">
       <div
         class="card"
-        *ngFor="let card of cards | keyvalue">
-        <img class="card-img-top" src="/assets/images/cards/{{ card.value }}.png" alt="Dixit card">
-        <div class="card-body text-center">
-          <div *ngIf="card.value == myVote" class="blob red"></div>
+        *ngFor="let card of cards | keyvalue;">
+        <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
+        <div *ngIf="storyTeller.uid == uid" class="card-body text-center">
+
+          <div *ngIf="loading === false && card.key == storyTeller.uid">
+            My card
+          </div>
+          <div *ngIf="loading === false && card.key != storyTeller.uid">
+            This is the card choosen by {{ getPlayerByUID(card.key) }}
+          </div>
+
+          <div *ngIf="card.value.choosenBy != undefined">
+            <div
+              *ngFor="let vote of card.value.choosenBy | keyvalue"
+              class="blob {{ vote.value.color }} ready float-left">
+            </div>
+          </div>
+        </div>
+        <div *ngIf="storyTeller.uid !== uid" class="card-body text-center">
+          <div *ngIf="loading === false">
+            <div *ngIf="card.key == storyTeller.uid">
+              <strong>This is the card explained by {{ storyTeller.name }}</strong>
+            </div>
+            <div *ngIf="card.key != storyTeller.uid">
+              This is the card choosen by {{ getPlayerByUID(card.key) }}
+            </div>
+
+            <div *ngIf="card.value.choosenBy != undefined">
+              <div
+                *ngFor="let vote of card.value.choosenBy | keyvalue"
+                class="blob {{ vote.value.color }} ready float-left">
+              </div>
+            </div>
+          </div>
+
           <button
-            *ngIf="!voted"
+            *ngIf="myVote == ''"
             type="button"
             class="btn btn-warning"
             (click)="finalCard(card)">
             This is the card
           </button>
         </div>
+
       </div>
     </div>
+
+    <div *ngIf="loading === false && host" class="container text-center">
+      <button type="button" class="btn btn-warning" (click)="nextRound()">
+        Next round
+      </button>
+    </div>
+
   </div>
+
 </div>
 
 

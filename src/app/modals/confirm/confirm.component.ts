@@ -40,7 +40,7 @@ export class ConfirmComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
         const roomData = Object.assign({}, ...data);
-        const selectedCards = { ...roomData.selectedCards, [uid]: card };
+        const selectedCards = { ...roomData.selectedCards, [uid]: { 'card': card }};
 
         const player = roomData.players.find(players => { return players.uid == uid.toString() });
         const cardsIndex = Object.keys(player.cards).find(key => player.cards[key] === this.selectedCard);

@@ -1,0 +1,38 @@
+<div class="modal-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+
+          <p class="mb-0 text-left">
+            Dixit provides a set of abstract illustrations that players need to describe.
+            Each turn one player will be the storyteller, who secretly chooses one of their dealt cards and announces its description — this can be a word, a phrase,
+            a related thought, etc. The rest of the players choose the card from their hand that best resembles the provided description,
+            and all the cards are mixed before being revealed.
+          </p> <br>
+
+          <p class="mb-0 text-left">
+            Once the cards are displayed, each player except the storyteller vote on which one they think is the original card that matches the description.
+            Players will be confused, since ideally everybody will have chosen an illustration that somehow resembles that thought.
+            The storyteller must not provide a description that is too obvious, since they won't get any points if all players guess their card.
+            On the other hand, if they are succinct enough for someone to guess their illustration, they will be awarded 3 points.
+            Players who correctly guess are also awarded 3 points, plus 1 additional point if any player votes their card.
+          </p> <br>
+
+          <div class="mb-0 text-left">
+            So the scoring is:
+
+            <ul>
+              <li class=""> <strong>0</strong> points for the storyteller if everybody guesses their card</li>
+              <li class=""> <strong>3</strong> points for the storyteller if someone, but not everybody, guesses their card</li>
+              <li class=""> <strong>3</strong> points for players who correctly guess the storyteller's card</li>
+              <li class=""> <strong>+1</strong> points for player who provided a card that is chosen by any other player.</li>
+            </ul>
+
+            The game ends when a player reaches 30 points or more (if there a more than one player with 30 points).
+          </div> <br>
+        <br>
+        <button type="button" class="btn btn-warning" #close (click)="activeModal.close()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

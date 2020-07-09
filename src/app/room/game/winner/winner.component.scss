@@ -1,0 +1,138 @@
+.room {
+  height: 100vh;
+}
+div.room::after {
+  content: "";
+  background: url('/assets/images/winner.jpg') center center no-repeat;
+  filter: grayscale(100%);
+  opacity: 0.85;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: -1;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+svg {
+  width: auto;
+  max-width: 50rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cls-1 {
+  fill: #2c51a3;
+}
+
+.cls-2 {
+  fill: #faaf4c;
+}
+
+.cls-3 {
+  fill: #f16279;
+}
+
+.cls-4 {
+  fill: #78c8aa;
+}
+
+.cls-5 {
+  fill: none;
+  stroke-width: 6px;
+}
+T
+.cls-5, .cls-6 {
+  stroke: #000;
+  stroke-linecap: round;
+  stroke-miterlimit: 10;
+}
+
+.mask {
+  fill: black;
+  stroke: white;
+  stroke-width: 5px;
+}
+
+#squiggle-mask-path {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: animate-stroke 1s 1.1s forwards cubic-bezier(0,1,.53,1);
+}
+
+#left-line-mask-path {
+  stroke-dasharray: 38;
+  stroke-dashoffset: -38;
+  animation: animate-stroke 1s 1.2s forwards cubic-bezier(0,1,.53,1);
+}
+
+#right-line-mask-path {
+  stroke-dasharray: 38;
+  stroke-dashoffset: -38;
+  animation: animate-stroke 1s 1.2s forwards cubic-bezier(0,1,.53,1);
+}
+
+@keyframes animate-stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+#mint-burst {
+  transform: translateY(70px);
+  animation: move-stars 1s 1s forwards cubic-bezier(0,1,.53,1);
+}
+
+#yellow-burst {
+  transform: translate(40px, 10px);
+  animation: move-stars 1s 1s forwards cubic-bezier(0,1,.53,1);
+}
+
+#red-burst {
+  transform: translate(-40px, 10px);
+  animation: move-stars 1s 1s forwards cubic-bezier(0,1,.53,1);
+}
+
+#blue-star {
+  transform: translate(10px, 40px);
+  animation: move-stars 1s 1025ms forwards cubic-bezier(0,1,.53,1);
+  display: inherit;
+}
+
+#yellow-star {
+  transform: translate(-10px, 45px);
+  animation: move-stars 1s 1050ms forwards cubic-bezier(0,1,.53,1);
+}
+
+@keyframes move-stars {
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.dot {
+  animation: reveal-dots 0.9s 1.2s both cubic-bezier(0,1,.53,1);
+  opacity: 0;
+  transform: translate(-5px, 10px);
+
+}
+
+.dot.left-side {
+  transform: translate(5px, 10px);
+}
+
+@keyframes reveal-dots {
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+

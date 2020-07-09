@@ -43,7 +43,6 @@ export class RoomComponent implements OnInit, OnDestroy {
         const roomData = Object.assign({}, ...result);
 
         if (roomData.newPlayer) {
-          console.log(roomData);
           if (roomData.hasOwnProperty('status')) {
             if (roomData.status == 'game-started') {
               this.router.navigate(['room/404']);

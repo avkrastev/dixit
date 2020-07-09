@@ -14,13 +14,14 @@ import { first } from 'rxjs/operators';
 export class GameComponent implements OnInit, OnDestroy {
   fetchRoomSub: Subscription;
   cards: any;
-  cardsCount: number;
+  storyTellerCardsCount: number;
   storyteller: boolean = false;
-  storytellerName: string;
+  storyTeller: any;
   waitingForTale: boolean = true;
   storyText: string;
   players: any;
   status: string = '';
+  myCardsCount:number;
 
   constructor(
     private modalsService: ModalsService,
@@ -42,6 +43,10 @@ export class GameComponent implements OnInit, OnDestroy {
         const username = JSON.parse(localStorage.getItem('username'));
         const uid = JSON.parse(localStorage.getItem('uid'));
 
+        if (roomData.nextRound) {
+          this.dataStorage.updateRoom({ ...roomData, nextRound: false});
+        }
+
         const player = roomData.players.find(players => { return players.uid == uid.toString() && players.name == username });
 
         if (typeof player == 'undefined') {
@@ -51,7 +56,7 @@ export class GameComponent implements OnInit, OnDestroy {
           return;
         }
 
-        const storyTeller = roomData.players.find(players => { return players.storyteller == true });
+        this.storyTeller = roomData.players.find(players => { return players.storyteller == true });
         const listeners = roomData.players.filter(players => { return players.storyteller == false && players.name != ''});
 
         if (typeof roomData.selectedCards != 'undefined' && Object.keys(listeners).length + 1 == Object.keys(roomData.selectedCards).length) {
@@ -60,14 +65,13 @@ export class GameComponent implements OnInit, OnDestroy {
         }
 
         this.cards = player.cards;
-        this.storytellerName = storyTeller.name;
 
-        if (storyTeller.uid == uid) {
-          this.storyteller = storyTeller.storyteller;
+        if (this.storyTeller.uid == uid) {
+          this.storyteller = this.storyTeller.storyteller;
         }
 
-        if (typeof roomData.cards != 'undefined') {
-          this.cardsCount = Object.keys(roomData.cards).length;
+        if (typeof this.storyTeller.cards != 'undefined') {
+          this.storyTellerCardsCount = Object.keys(this.storyTeller.cards).length;
         }
 
         if (typeof roomData.story != 'undefined') {
@@ -75,6 +79,7 @@ export class GameComponent implements OnInit, OnDestroy {
           this.waitingForTale = false;
         }
         this.players = listeners;
+        this.myCardsCount = Object.keys(player.cards).length;
       }
     );
   }
@@ -95,11 +100,5 @@ export class GameComponent implements OnInit, OnDestroy {
       this.fetchRoomSub.unsubscribe();
     }
   }
-
-  // For debugging
-  log(val) {
-    console.log(val);
-  }
-
 
 }

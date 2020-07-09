@@ -71,4 +71,21 @@ export class NewGameService {
     return player;
   }
 
+  winner(data) {
+    const winners = data.players
+                    .filter(players => { return players.points >= 10 })
+                    .sort(function(a, b) { return b.points - a.points; });
+
+    let winner = {};
+    if (Object.keys(winners).length == 1) {
+      winner = winners[0];
+    } else {
+      if (winners[0] > winners[1]) {
+        winner = winners[0];
+      }
+    }
+
+    return winner;
+  }
+
 }

@@ -20,6 +20,8 @@ import { HeaderComponent } from './header/header.component';
 import { TellStoryComponent } from './modals/tell-story/tell-story.component';
 import { ConfirmComponent } from './modals/confirm/confirm.component';
 import { RoundComponent } from './room/game/round/round.component';
+import { RulesComponent } from './modals/rules/rules.component';
+import { WinnerComponent } from './room/game/winner/winner.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { RoundComponent } from './room/game/round/round.component';
     TellStoryComponent,
     ConfirmComponent,
     RoundComponent,
+    RulesComponent,
+    WinnerComponent,
   ],
   imports: [
     BrowserModule,

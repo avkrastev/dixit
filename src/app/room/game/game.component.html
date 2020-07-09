@@ -7,19 +7,29 @@
   </div>
   <div *ngIf="waitingForTale && !storyteller && status == ''" class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-4 text-center">Waiting for {{ storytellerName }} to tell us a story... </h1>
+      <h1 class="display-4 text-center">Waiting for {{ storyTeller != undefined ? storyTeller.name : '' }} to tell us a story... </h1>
+    </div>
+  </div>
+  <div *ngIf="waitingForTale && storyteller && status == ''" class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4 text-center">{{ storyTeller != undefined ? storyTeller.name : '' }}, it is your turn to tell a story... </h1>
     </div>
   </div>
   <div *ngIf="!waitingForTale && status == ''" class="jumbotron jumbotron-fluid">
     <div class="container">
       <div class="d-flex justify-content-center">
+        <div>
+          <div class="blob {{ storyTeller.color }} ready float-left"></div>
+          <span>{{ storyTeller.name }} </span>
+          <div class="points">({{ storyTeller.points }} p.) </div>
+        </div>
         <div *ngFor="let player of players; let i = index">
           <div class="blob {{ player.color }} {{ player.roundFinished ? 'ready' : '' }} float-left"></div>
           <span>{{ player.name }} </span>
           <div class="points">({{ player.points }} p.) </div>
         </div>
       </div>
-      <h1 class="display-4 text-center">The story: "{{ storyText }}"</h1>
+      <h1 class="display-4 text-center">The story: "<strong>{{ storyText }}</strong>" told by {{ storyTeller.name }}</h1>
     </div>
   </div>
   <div class="card-deck-wrapper">
@@ -31,7 +41,7 @@
         <div class="card-body text-center">
           <button
             *ngIf="storyteller"
-            [disabled]="cardsCount < -6"
+            [disabled]="storyTellerCardsCount < 6"
             type="button"
             (click)="tellStory(card.value)"
             class="btn btn-warning">
@@ -39,11 +49,11 @@
           </button>
           <button
             *ngIf="!storyteller"
-            [disabled]="waitingForTale"
+            [disabled]="waitingForTale || myCardsCount < 6"
             type="button"
             (click)="listenerCardChoice(card.value)"
             class="btn btn-warning">
-            I fit the most
+              I fit the most
           </button>
         </div>
       </div>

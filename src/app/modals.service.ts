@@ -6,6 +6,7 @@ import { RoomModalComponent } from './modals/room-modal/room-modal.component';
 import { TellStoryComponent } from './modals/tell-story/tell-story.component';
 import { ConfirmComponent } from './modals/confirm/confirm.component';
 import { BehaviorSubject } from 'rxjs';
+import { RulesComponent } from './modals/rules/rules.component';
 
 @Injectable({providedIn: 'root'})
 export class ModalsService {
@@ -32,6 +33,10 @@ export class ModalsService {
         break;
       case 'tellStory':
         modalComponent = TellStoryComponent;
+        size = 'lg';
+        break;
+      case 'rules':
+        modalComponent = RulesComponent;
         size = 'lg';
         break;
       default:
