@@ -11,7 +11,6 @@ export class NewGameService {
   roomCode : string;
   game : Room[] = [];
   username : string;
-  usernameStored : Subject<string> = new Subject<string>();
 
   constructor(
     private router: Router,
@@ -26,7 +25,6 @@ export class NewGameService {
     localStorage.setItem('uid', JSON.stringify(Date.now()));
 
     this.username = username;
-    this.usernameStored.next(username);
   }
 
   get loggedUser() {
@@ -34,9 +32,8 @@ export class NewGameService {
   }
 
   removeUsername() {
-    this.router.navigate(['/']);
     localStorage.clear();
-    this.usernameStored.next('');
+    this.router.navigate(['/']);
   }
 
   hostNewGame() {
@@ -72,20 +69,23 @@ export class NewGameService {
   }
 
   winner(data) {
-    const winners = data.players
-                    .filter(players => { return players.points >= 10 })
-                    .sort(function(a, b) { return b.points - a.points; });
-
-    let winner = {};
-    if (Object.keys(winners).length == 1) {
-      winner = winners[0];
-    } else {
-      if (winners[0] > winners[1]) {
+    if (data !== undefined) {
+      const winners = data.players
+                          .filter(players => { return players.points >= 30 })
+                          .sort(function(a, b) { return b.points - a.points; });
+      let winner = {};
+      if (Object.keys(winners).length == 1) {
         winner = winners[0];
+      } else {
+        if (winners[0] > winners[1]) {
+          winner = winners[0];
+        }
       }
+
+      return winner;
     }
 
-    return winner;
+    return {};
   }
 
 }

@@ -22,6 +22,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
   allPlayersCount: number;
   hostPlayer: boolean = false;
   subscription : Subscription;
+  status: string;
 
   constructor(
     private newGameService: NewGameService,
@@ -49,17 +50,21 @@ export class PlayersComponent implements OnInit, OnDestroy {
       if (Object.keys(roomData).length <= 0) {
         return;
       }
+      this.status = '';
+      const uid = JSON.parse(localStorage.getItem('uid'));
+      const ownPlayer = roomData.players.find(players => { return players.uid == uid.toString() });
 
-      if (roomData.gameStarted) {
+      if (roomData.gameStarted && typeof ownPlayer !== 'undefined') {
         this.router.navigate(['round/'+roomData.round], {relativeTo: this.route});
+        return;
+      } else if (roomData.gameStarted && typeof ownPlayer === 'undefined') {
+        this.status = 'This game has already been started!';
         return;
       }
 
       this.loading = false;
       this.players = roomData.players;
 
-      const uid = JSON.parse(localStorage.getItem('uid'));
-      const ownPlayer = roomData.players.find(players => { return players.uid == uid.toString() });
       const readyPlayers = roomData.players.filter(players => { return players.ready == true });
       const notReadyPlayersCount = roomData.players.filter(players => { return players.name != '' && players.ready == false });
       const allPlayersCount = roomData.players.filter(players => { return players.name != '' });
@@ -81,7 +86,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
         this.hostPlayer = hostPlayer.uid == uid ? true : false;
       }
 
-      if (typeof readyPlayers !== 'undefined' && readyPlayers.length > 2 && this.allPlayersCount >= 3) {
+      this.startBtn = false;
+      if (typeof readyPlayers !== 'undefined' && this.allPlayersCount >= 3 && readyPlayers.length == this.allPlayersCount) {
         this.startBtn = true;
       }
     });
@@ -140,17 +146,14 @@ export class PlayersComponent implements OnInit, OnDestroy {
       .subscribe(roomData =>  {
         const allPlayers = roomData.players.filter(players => { return players.name != '' });
 
-        let min = 0;
-        let max = 114;
         let allCards = Array.from(Array(115), (_, i) => i + 1);
 
         for (let player in allPlayers) {
           let cardsPerPlayer = [];
           for (let j = 0; j < 6; j++) {
-            const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            const randomNumber = Math.floor(Math.random() * ((allCards.length - 1) - 0 + 1)) + 0;
             cardsPerPlayer.push(allCards[randomNumber]);
             allCards.splice(randomNumber, 1);
-            max--;
           }
 
           allPlayers[player].cards = { ...cardsPerPlayer };

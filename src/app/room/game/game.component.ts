@@ -1,17 +1,18 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
 import { DataStorageService } from 'src/app/data-storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription, Subject, Observable } from 'rxjs';
 import { ModalsService } from 'src/app/modals.service';
 import { NewGameService } from 'src/app/new-game.service';
 import { first } from 'rxjs/operators';
+import { CanComponentDeactivate } from './can-deactivate-guard.service';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   fetchRoomSub: Subscription;
   cards: any;
   storyTellerCardsCount: number;
@@ -48,13 +49,6 @@ export class GameComponent implements OnInit, OnDestroy {
         }
 
         const player = roomData.players.find(players => { return players.uid == uid.toString() && players.name == username });
-
-        if (typeof player == 'undefined') {
-          this.status = 'This game has already been started!';
-          // TODO Pass data to 404 or another route?
-          this.router.navigate(['/room/404']);
-          return;
-        }
 
         this.storyTeller = roomData.players.find(players => { return players.storyteller == true });
         const listeners = roomData.players.filter(players => { return players.storyteller == false && players.name != ''});
@@ -93,6 +87,11 @@ export class GameComponent implements OnInit, OnDestroy {
     // TODO should I use other subject?
     this.modalsService.selectedCard.next(card);
     this.modalsService.open('confirm');
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  canDeactivate (): Observable<boolean> | Promise<boolean> | boolean {
+    return confirm('Are you sure you want to leave?');
   }
 
   ngOnDestroy() {

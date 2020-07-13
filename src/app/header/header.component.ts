@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NewGameService } from '../new-game.service';
 import { DataStorageService } from '../data-storage.service';
@@ -11,8 +11,9 @@ import { ModalsService } from '../modals.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  navbarCollapsed:boolean = true;
+  navbarCollapsed: boolean = true;
   leaveGameSub: Subscription;
+  gameIsStarted: boolean = false;
 
   constructor(
     private router: Router,
@@ -36,10 +37,10 @@ export class HeaderComponent implements OnInit {
     const uid = JSON.parse(localStorage.getItem('uid'));
 
     if (typeof room == 'undefined' || room == 404) {
-      this.router.navigate(['/']);
       if (logout) {
         this.newGameService.removeUsername();
       }
+      this.router.navigate(['/']);
       return;
     }
 
@@ -54,30 +55,14 @@ export class HeaderComponent implements OnInit {
 
         const playerToRemove = roomData.players.find(players => { return players.uid == uid.toString() });
 
+        this.gameIsStarted = roomData.gameStarted;
+        if (this.gameIsStarted) {
+          this.router.navigate(['/'], {state: {playerToRemove: playerToRemove, roomData: roomData, logout: logout}});
+          return;
+        }
+
         if (typeof playerToRemove != 'undefined') {
-          const playersLeft = roomData.players.find(players => { return players.name != '' && players.name != playerToRemove.name });
-          let method = 'deleteRoom';
-
-          if (typeof playersLeft != 'undefined') {
-            if (playerToRemove.host) {
-              playersLeft.host = true;
-            }
-            method = 'updateRoom';
-          }
-
-          this.newGameService.resetPlayerFields(playerToRemove);
-
-          if (method == 'updateRoom') {
-            const message = 'One player left!';
-            this.dataStorage.updateRoom({ ...roomData }, message);
-          } else {
-            this.dataStorage.deleteRoom(roomData.id);
-          }
-
-          if (logout) {
-            this.newGameService.removeUsername();
-          }
-          this.router.navigate(['/']);
+          this.dataStorage.removePlayerFromRoom(playerToRemove, roomData, logout);
         }
       }
     );

@@ -108,6 +108,32 @@ export class DataStorageService {
     )
   }
 
+  removePlayerFromRoom(playerToRemove, roomData, logout) {
+    const playersLeft = roomData.players.find(players => { return players.name != '' && players.name != playerToRemove.name });
+    let method = 'deleteRoom';
+
+    if (typeof playersLeft != 'undefined') {
+      if (playerToRemove.host) {
+        playersLeft.host = true;
+      }
+      method = 'updateRoom';
+    }
+
+    this.newGameService.resetPlayerFields(playerToRemove);
+
+    if (method == 'updateRoom') {
+      const message = 'One player left!';
+      this.updateRoom({ ...roomData }, message);
+    } else {
+      this.deleteRoom(roomData.id);
+    }
+
+    if (logout) {
+      this.newGameService.removeUsername();
+    }
+    this.router.navigate(['/']);
+  }
+
   deleteRoom(id:string){
     return this.db.collection('rooms').doc(id).delete();
   }

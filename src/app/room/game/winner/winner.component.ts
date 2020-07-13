@@ -28,6 +28,10 @@ export class WinnerComponent implements OnInit {
         data => {
           // TODO check if room exists
           const roomData = Object.assign({}, ...data);
+          if (Object.keys(roomData).length <= 0) {
+            this.router.navigate(['/']);
+            return;
+          }
           this.winner = this.newGameServive.winner(roomData);
           this.roomId = roomData.id;
         }

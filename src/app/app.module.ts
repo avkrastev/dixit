@@ -22,6 +22,7 @@ import { ConfirmComponent } from './modals/confirm/confirm.component';
 import { RoundComponent } from './room/game/round/round.component';
 import { RulesComponent } from './modals/rules/rules.component';
 import { WinnerComponent } from './room/game/winner/winner.component';
+import { CanDeactivateGuard } from './room/game/can-deactivate-guard.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { WinnerComponent } from './room/game/winner/winner.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
   ],
-  providers: [],
+  providers: [CanDeactivateGuard],
   bootstrap: [AppComponent],
   entryComponents: [
     NameModalComponent,

@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { DataStorageService } from 'src/app/data-storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NewGameService } from 'src/app/new-game.service';
+import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 
 @Component({
   selector: 'app-round',
   templateUrl: './round.component.html',
   styleUrls: ['./round.component.scss']
 })
-export class RoundComponent implements OnInit {
+export class RoundComponent implements OnInit, CanComponentDeactivate {
   cards: any;
   roomData: any;
   myName: string;
@@ -23,6 +24,7 @@ export class RoundComponent implements OnInit {
   loading: boolean = true;
   uid: number;
   host: boolean = false;
+  myPoints: string;
 
   constructor(
     private dataStorage: DataStorageService,
@@ -135,28 +137,65 @@ export class RoundComponent implements OnInit {
   private scoring() {
     let storyCardGuesses = 0;
     const storyCard = this.roomData.selectedCards[this.storyTeller.uid].card;
+    let listeners = [];
 
     for (let key in this.roomData.selectedCards) {
-        if (this.roomData.selectedCards[key]['choosenBy'] !== undefined) {
-          for (let player in this.roomData.selectedCards[key]['choosenBy']) {
-            if (this.roomData.selectedCards[key].card == storyCard) {
-              // 3 points for players who correctly guess the storyteller's card
-              const listener = this.roomData.players.find(players => { return players.storyteller == false &&
-                players.uid == this.roomData.selectedCards[key]['choosenBy'][player].uid.toString() });
-              listener.points += 3;
-              storyCardGuesses++;
-            } else if (this.roomData.selectedCards[key]['choosenBy'][player].uid != key) {
-              // +1 points for player who provided a card that is chosen by any other player.
-              const listener = this.roomData.players.find(players => { return players.uid == key.toString() });
-              listener.points += 1;
+      if (this.roomData.selectedCards[key]['choosenBy'] !== undefined) {
+        this.myPoints = '';
+
+        for (let player in this.roomData.selectedCards[key]['choosenBy']) {
+          if (this.roomData.selectedCards[key].card == storyCard) {
+            // 3 points for players who correctly guess the storyteller's card
+            const listener = this.roomData.players.find(players => { return players.storyteller == false &&
+                                                                            players.uid == this.roomData.selectedCards[key]['choosenBy'][player].uid.toString() });
+            listener.points += 3;
+            if (listener.uid == this.uid) {
+              this.myPoints = listener.name + ', you receive 3 points by guessing the correct card!';
             }
+
+            storyCardGuesses++;
+          } else if (this.roomData.selectedCards[key]['choosenBy'][player].uid != key) {
+            // +1 points for player who provided a card that is chosen by any other player.
+            const listener = this.roomData.players.find(players => { return players.uid == key.toString() });
+            listener.points += 1;
+            if (listeners.includes(listener.uid)) continue;
+            listeners.push(listener.uid);
           }
         }
+      }
+    }
+
+    for (let k in listeners) {
+      if (listeners[k] == this.uid) {
+        for (let contributor in this.roomData.selectedCards[listeners[k]]['choosenBy']) {
+          if (this.myPoints != '') {
+            this.myPoints += ' \n + 1 point from ' + this.roomData.selectedCards[listeners[k]]['choosenBy'][contributor].name;
+          } else {
+            this.myPoints = ' + 1 point from ' + this.roomData.selectedCards[listeners[k]]['choosenBy'][contributor].name;
+          }
+        }
+      }
+    }
+
+    if (this.myPoints == '') {
+      this.myPoints = 'You don\'t get any points this round!'
     }
 
     // 3 points for the storyteller if someone, but not everybody, guesses their card
     if (storyCardGuesses > 0 && storyCardGuesses < this.players.length - 1) {
       this.storyTeller.points += 3;
+      if (this.storyTeller.uid == this.uid) {
+        this.myPoints = this.storyTeller.name + ', you receive 3 points because someone but not everyone guessed your card!';
+      }
+    } else {
+      if (this.storyTeller.uid == this.uid) {
+        if (storyCardGuesses == 0) {
+          this.myPoints = this.storyTeller.name + ', you don\'t receive any points because nobody guessed your card!';
+        }
+        if (storyCardGuesses == this.players.length - 1) {
+          this.myPoints = this.storyTeller.name + ', you don\'t receive any points because everybody guessed your card!';
+        }
+      }
     }
 
     this.roomData.round++;
@@ -200,5 +239,10 @@ export class RoundComponent implements OnInit {
     }
 
     this.dataStorage.updateRoom({ ...this.roomData });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  canDeactivate (): Observable<boolean> | Promise<boolean> | boolean {
+    return confirm('Are you sure you want to leave?');
   }
 }

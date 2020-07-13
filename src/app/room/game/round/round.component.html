@@ -5,12 +5,15 @@
       <div class="d-flex justify-content-center">
         <div *ngFor="let player of players;">
           <div class="blob {{ player.color }} float-left"></div>
-          <span>{{ player.name }} </span>
+          <span class="{{ player.uid == uid ? 'font-weight-bold' : ''}}">{{ player.name }} </span>
           <div class="points">({{ player.points }} p.) </div>
         </div>
       </div>
       <div *ngIf="loading" class="text-center">
         Waiting for the rest of the players to choose a card...
+      </div>
+      <div *ngIf="loading === false && myPoints != ''" class="text-center" style="white-space: pre-line">
+        {{ myPoints }}
       </div>
     </div>
   </div>

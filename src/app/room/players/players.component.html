@@ -13,6 +13,11 @@
             <div class="blob"></div>
             <div class="blob grey"></div>
           </div>
+          <div *ngIf="status != ''">
+            <div class="players-container not-found">
+              <h5 class="text-center white">{{ status }}</h5>
+            </div>
+          </div>
           <div *ngIf="!pageNotFound && !loading" class="header-container">
             <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
              <div *ngIf="notReadyPlayersCount > 0" class="game-status">
