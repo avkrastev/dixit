@@ -1,8 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { DataStorageService } from 'src/app/data-storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { NewGameService } from 'src/app/new-game.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 
@@ -78,7 +77,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
 
         this.winner = this.newGameServices.winner(this.roomData);
         if (Object.keys(this.winner).length > 0) {
-          this.router.navigate(['/room/'+room+'/winner'], {state: {winner: this.winner}});
+          this.router.navigate(['/room/'+room+'/winner']);
         }
 
         // this.leaderboard = Array(31);
@@ -241,7 +240,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     this.dataStorage.updateRoom({ ...this.roomData });
   }
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload')
   canDeactivate (): Observable<boolean> | Promise<boolean> | boolean {
     return confirm('Are you sure you want to leave?');
   }

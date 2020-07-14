@@ -33,6 +33,8 @@ export class StartComponent implements OnInit {
       this.dataStorage.removePlayerFromRoom(playerToRemove, roomData, logout);
     }
     this.username = JSON.parse(localStorage.getItem('username'));
+
+    this.dataStorage.deleteOldRooms();
   }
 
   newGame() {

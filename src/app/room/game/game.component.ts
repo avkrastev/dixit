@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { DataStorageService } from 'src/app/data-storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, Subject, Observable } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { ModalsService } from 'src/app/modals.service';
-import { NewGameService } from 'src/app/new-game.service';
-import { first } from 'rxjs/operators';
 import { CanComponentDeactivate } from './can-deactivate-guard.service';
 
 @Component({
@@ -23,6 +21,9 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   players: any;
   status: string = '';
   myCardsCount:number;
+  uid: number;
+  counter:any;
+  listenersIntervalId;
 
   constructor(
     private modalsService: ModalsService,
@@ -37,18 +38,20 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     if (room == 404) {
       this.router.navigate(['/room/404']);
     }
+    // this.counter = { min: ('00' + 2).slice(-2), sec: ('00' + 0).slice(-2) };
+    // const intervalId = this.timer();
 
     this.dataStorage.fetchStartedGame(room).subscribe(
       data => {
         const roomData = Object.assign({}, ...data);
         const username = JSON.parse(localStorage.getItem('username'));
-        const uid = JSON.parse(localStorage.getItem('uid'));
+        this.uid = JSON.parse(localStorage.getItem('uid'));
 
         if (roomData.nextRound) {
           this.dataStorage.updateRoom({ ...roomData, nextRound: false});
         }
 
-        const player = roomData.players.find(players => { return players.uid == uid.toString() && players.name == username });
+        const player = roomData.players.find(players => { return players.uid == this.uid.toString() && players.name == username });
 
         this.storyTeller = roomData.players.find(players => { return players.storyteller == true });
         const listeners = roomData.players.filter(players => { return players.storyteller == false && players.name != ''});
@@ -60,7 +63,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
 
         this.cards = player.cards;
 
-        if (this.storyTeller.uid == uid) {
+        if (this.storyTeller.uid == this.uid) {
           this.storyteller = this.storyTeller.storyteller;
         }
 
@@ -71,11 +74,37 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         if (typeof roomData.story != 'undefined') {
           this.storyText = roomData.story;
           this.waitingForTale = false;
+          // clearInterval(intervalId);
+
+          // this.counter = { min: ('00' + 2).slice(-2), sec: ('00' + 0).slice(-2) };
+          // this.listenersIntervalId = this.timer();
+          // console.log(this.listenersIntervalId);
         }
+
         this.players = listeners;
         this.myCardsCount = Object.keys(player.cards).length;
       }
     );
+  }
+
+  private timer() {
+    let intervalId = setInterval(() => {
+      if (this.counter.sec - 1 == -1) {
+        this.counter.min -= 1;
+        this.counter.min = ('00' + this.counter.min).slice(-2);
+        this.counter.sec = 59;
+      } else {
+        this.counter.sec -= 1;
+        this.counter.sec = ('00' + this.counter.sec).slice(-2);
+      }
+
+      if (this.counter.min == '00' && this.counter.sec == '00') {
+        clearInterval(intervalId);
+
+      }
+    }, 1000);
+
+    return intervalId;
   }
 
   tellStory(card) {
@@ -89,7 +118,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.modalsService.open('confirm');
   }
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload')
   canDeactivate (): Observable<boolean> | Promise<boolean> | boolean {
     return confirm('Are you sure you want to leave?');
   }

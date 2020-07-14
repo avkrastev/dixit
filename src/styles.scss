@@ -8,6 +8,14 @@ button:focus, button:active {
   box-shadow: none !important;
 }
 
+.standings {
+  width: 100%;
+  margin: 0 auto;
+  z-index: 3;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
 
 .blobs-container {
 	display: flex;
@@ -28,6 +36,14 @@ button:focus, button:active {
 // }
 .blob.ready {
   animation: colorchange 1s ease 0s 1 normal forwards !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .blob {
+    margin: 5px;
+    height: 10px;
+    width: 10px;
+  }
 }
 
 @keyframes pulse-black {

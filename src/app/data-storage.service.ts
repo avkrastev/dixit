@@ -41,7 +41,8 @@ export class DataStorageService {
       {
         key: room,
         players: playersObj,
-        gameStarted: false
+        gameStarted: false,
+        created: Date.now()
       }
     );
   }
@@ -146,6 +147,27 @@ export class DataStorageService {
     })
     .catch(function(error) {
       console.error('Error storing data:', error);
+    });
+  }
+
+  deleteOldRooms() {
+    var d = new Date();
+    d.setHours(d.getHours() - 24);
+
+    return this.db.collection('rooms', ref => ref.where('created', '<', d.getTime())).snapshotChanges().pipe(
+      map(actions => {
+        const filteredData = actions.map(a => {
+          const id = a.payload.doc.id;
+
+          return { id: id };
+        }).filter(result => Object.keys(result).length > 0);
+
+        return filteredData;
+      })
+    ).subscribe(rooms => {
+      for (let room in rooms) {
+        this.deleteRoom(rooms[room].id);
+      }
     });
   }
 

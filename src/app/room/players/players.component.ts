@@ -162,6 +162,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
         roomData.remainingCards = { ...allCards };
         roomData.gameStarted = true;
         roomData.round = 1;
+        delete roomData.newPlayer;
 
         const message = 'First round started!';
         this.dataStorage.updateRoom({ ...roomData }, message);

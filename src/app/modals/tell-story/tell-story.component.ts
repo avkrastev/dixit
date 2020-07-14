@@ -11,7 +11,7 @@ import { first } from 'rxjs/operators';
   styleUrls: ['../modals.component.scss']
 })
 export class TellStoryComponent implements OnInit {
-  selectedCard:number;
+  selectedCard: number;
   @ViewChild('close') close;
 
   constructor(

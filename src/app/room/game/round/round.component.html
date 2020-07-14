@@ -1,6 +1,6 @@
 <div class="room">
   <app-header></app-header>
-  <div class="jumbotron jumbotron-fluid">
+  <div class="jumbotron jumbotron-fluid standings">
     <div class="container">
       <div class="d-flex justify-content-center">
         <div *ngFor="let player of players;">
@@ -10,9 +10,9 @@
         </div>
       </div>
       <div *ngIf="loading" class="text-center">
-        Waiting for the rest of the players to choose a card...
+        Waiting for the players to choose a card...
       </div>
-      <div *ngIf="loading === false && myPoints != ''" class="text-center" style="white-space: pre-line">
+      <div *ngIf="loading === false && myPoints != ''" class="text-center summary">
         {{ myPoints }}
       </div>
     </div>
@@ -43,14 +43,14 @@
         <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
         <div *ngIf="storyTeller.uid == uid" class="card-body text-center">
 
-          <div *ngIf="loading === false && card.key == storyTeller.uid">
+          <div *ngIf="card.key == storyTeller.uid">
             My card
           </div>
-          <div *ngIf="loading === false && card.key != storyTeller.uid">
+          <div *ngIf="card.key != storyTeller.uid">
             This is the card choosen by {{ getPlayerByUID(card.key) }}
           </div>
 
-          <div *ngIf="card.value.choosenBy != undefined">
+          <div class="dots" *ngIf="card.value.choosenBy != undefined">
             <div
               *ngFor="let vote of card.value.choosenBy | keyvalue"
               class="blob {{ vote.value.color }} ready float-left">
@@ -66,7 +66,7 @@
               This is the card choosen by {{ getPlayerByUID(card.key) }}
             </div>
 
-            <div *ngIf="card.value.choosenBy != undefined">
+            <div class="dots" *ngIf="card.value.choosenBy != undefined">
               <div
                 *ngFor="let vote of card.value.choosenBy | keyvalue"
                 class="blob {{ vote.value.color }} ready float-left">
