@@ -9,8 +9,8 @@
           <div class="points">({{ player.points }} p.) </div>
         </div>
       </div>
-      <div *ngIf="loading" class="text-center">
-        Waiting for the players to choose a card...
+      <div *ngIf="loading" class="text-center loading">
+        Waiting for the players to choose a card
       </div>
       <div *ngIf="loading === false && myPoints != ''" class="text-center summary">
         {{ myPoints }}
@@ -40,7 +40,16 @@
       <div
         class="card"
         *ngFor="let card of cards | keyvalue;">
-        <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
+        <div class="scene">
+          <div class="deck">
+            <div class="card-face front">
+              <div class="card-title"></div>
+            </div>
+            <div class="card-face back">
+              <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
+            </div>
+          </div>
+        </div>
         <div *ngIf="storyTeller.uid == uid" class="card-body text-center">
 
           <div *ngIf="card.key == storyTeller.uid">

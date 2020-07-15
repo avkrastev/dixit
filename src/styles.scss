@@ -247,3 +247,83 @@ button:focus, button:active {
 	animation: pulse-grey 2s infinite;
 }
 
+.scene {
+  width: auto;
+  height: 350px;
+  //perspective: 600px;
+}
+
+.deck {
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  position: relative;
+  animation: rotate 5s ease 1;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card-face.front {
+  background: linear-gradient(to top, #996633 0%, #663300 100%);
+  border: 5px solid white;
+}
+
+.card-title {
+  background: url("/assets/images/big-logo.png") no-repeat center center;
+  background-size: 10em;
+  height: 350px;
+  width: 100%;
+}
+
+.card-face.back {
+  transform: rotateY(180deg);
+}
+
+@keyframes rotate {
+  50%, to { transform: rotateY(180deg); }
+}
+
+/* loading dots */
+
+.loading:after {
+  content: '.';
+  animation: dots 2s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+    }
+  40% {
+    color: black;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+    }
+  60% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 rgba(0,0,0,0);
+    }
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 black;
+    }
+}
