@@ -2,6 +2,8 @@
 
 Transforming the popular storytelling board game into its online version.
 
+![](src/assets/dixit-box.png)
+
 # Tech
 Dixit uses a number of open source projects to work properly:
 
@@ -15,7 +17,7 @@ And of course Dixit itself is open source with a [public repository][avkrastev] 
 You should install [Angular Framework](https://angular.io/guide/setup-local) locally.
 Then you need to setup the your own [Firebase configuration](https://firebase.google.com/docs/web/setup).
 
-After that you have to put the configuration in `src/environments/environment.ts`. You have to create such file if it is missing.
+After that, you have to put the configuration in `src/environments/environment.ts`. You have to create such file, if it is missing.
 It should look like this:
 
 ```
@@ -40,11 +42,11 @@ Then we are ready to build the project.
 $ ng build --prod
 ```
 
-After successfull buidl we will have a new directory under `dist` folder. And we are ready now for deployment.
+After successful build we will have a new directory under `dist` folder. And we are ready now for deployment.
 
 ## Deploy
 
-First, we need to go to [Firebase CLI](https://firebase.google.com/docs/cli) and install firebase-tools package.
+First, we need to go to [Firebase CLI](https://firebase.google.com/docs/cli) and install *firebase-tools* package.
 
 Then, we have to login via the command line.
 
