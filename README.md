@@ -4,6 +4,10 @@ Transforming the popular storytelling board game into its online version.
 
 ![](src/assets/images/dixit-box.png)
 
+Here is the link to an already deployed version of the game:
+
+### [Dixit Online](https://dixit2-766a1.web.app/)
+
 # Tech
 Dixit uses a number of open source projects to work properly:
 
