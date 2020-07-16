@@ -50,3 +50,10 @@ small {
   font-style: italic;
   font-size: 66% !important;
 }
+
+.copyBtn {
+  cursor: pointer;
+}
+.copyBtn.copy {
+  vertical-align: top;
+}

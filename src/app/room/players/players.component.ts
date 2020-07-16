@@ -23,6 +23,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
   hostPlayer: boolean = false;
   subscription : Subscription;
   status: string;
+  copied: string = 'copy';
 
   constructor(
     private newGameService: NewGameService,
@@ -167,6 +168,22 @@ export class PlayersComponent implements OnInit, OnDestroy {
         const message = 'First round started!';
         this.dataStorage.updateRoom({ ...roomData }, message);
     });
+  }
+
+  copyToClipboard(room): void {
+    let listener = (e: ClipboardEvent) => {
+        e.clipboardData.setData('text/plain', (room));
+        e.preventDefault();
+    };
+
+    document.addEventListener('copy', listener);
+    document.execCommand('copy');
+    document.removeEventListener('copy', listener);
+
+    this.copied = 'ready';
+    setTimeout(() => {
+      this.copied = 'copy';
+    }, 2000);
   }
 
   ngOnDestroy() {

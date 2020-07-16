@@ -19,7 +19,10 @@
             </div>
           </div>
           <div *ngIf="!pageNotFound && !loading" class="header-container">
-            <h5 id="room-code"><strong>Room Code: </strong> {{ room }}</h5>
+            <h5 id="room-code">
+              <strong>Room Code: </strong> {{ room }}
+              <img src="assets/images/{{ copied }}.png" title="Copy to Clipboard" class="copyBtn {{ copied }}" (click)="copyToClipboard(room)"/>
+            </h5>
              <div *ngIf="notReadyPlayersCount > 0" class="game-status">
               <em class="text-danger">Waiting for {{ notReadyPlayersCount }} player(s) to ready up!</em>
              </div>
