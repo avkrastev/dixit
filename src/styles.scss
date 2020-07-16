@@ -327,3 +327,10 @@ button:focus, button:active {
       .5em 0 0 black;
     }
 }
+
+.rules-modal .modal-content {
+  background: none !important;
+  background-clip: unset !important;
+  border: none !important;
+  border-radius: 0 !important;
+}

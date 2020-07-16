@@ -21,6 +21,7 @@ export class ModalsService {
     let modalComponent:any;
 
     let size = 'sm';
+    let windowClass = '';
     switch(modal) {
       case 'enterName':
         modalComponent = NameModalComponent;
@@ -37,7 +38,8 @@ export class ModalsService {
         break;
       case 'rules':
         modalComponent = RulesComponent;
-        size = 'lg';
+        size = 'xl';
+        windowClass = 'rules-modal';
         break;
       default:
         modalComponent = NameModalComponent;
@@ -45,7 +47,8 @@ export class ModalsService {
 
     this.modalService.open(modalComponent, {
       centered: true,
-      size: size
+      size: size,
+      windowClass: windowClass
     });
   }
 
