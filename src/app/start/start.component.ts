@@ -38,7 +38,7 @@ export class StartComponent implements OnInit {
   }
 
   newGame() {
-    if (!this.username) {
+    if (!JSON.parse(localStorage.getItem('username'))) {
       this.modalsService.open('enterName');
     } else {
       this.dataStorage.newGame();
