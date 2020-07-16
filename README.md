@@ -2,7 +2,7 @@
 
 Transforming the popular storytelling board game into its online version.
 
-![](src/assets/dixit-box.png)
+![](src/assets/images/dixit-box.png)
 
 # Tech
 Dixit uses a number of open source projects to work properly:
