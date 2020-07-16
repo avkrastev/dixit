@@ -34,42 +34,45 @@
       </tbody>
     </table>
   </div> -->
+  <!-- <div class="container decks">
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="stack" class="cards-container">
+          <section id="card1" class="card card1"></section>
+          <section id="card2" class="card card2"></section>
+          <section id="card3" class="card card3"></section>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <button
+          type="button"
+          class="btn btn-warning">
+          Show cards
+        </button>
+      </div>
+    </div>
+  </div> -->
 
-  <div class="card-deck-wrapper">
-    <div class="card-deck">
-      <div
-        class="card"
-        *ngFor="let card of cards | keyvalue;">
-        <div class="scene">
-          <div class="deck">
-            <div class="card-face front">
-              <div class="card-title"></div>
-            </div>
-            <div class="card-face back">
-              <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
-            </div>
-          </div>
-        </div>
-        <div *ngIf="storyTeller.uid == uid" class="card-body text-center">
-
-          <div *ngIf="card.key == storyTeller.uid">
-            My card
-          </div>
-          <div *ngIf="card.key != storyTeller.uid">
-            This is the card choosen by {{ getPlayerByUID(card.key) }}
-          </div>
-
-          <div class="dots" *ngIf="card.value.choosenBy != undefined">
-            <div
-              *ngFor="let vote of card.value.choosenBy | keyvalue"
-              class="blob {{ vote.value.color }} ready float-left">
+  <div class="container">
+    <div class="card-deck-wrapper">
+      <div class="card-deck">
+        <div
+          class="card"
+          *ngFor="let card of cards | keyvalue;">
+          <div class="scene">
+            <div class="deck">
+              <div class="card-face front">
+                <div class="card-title"></div>
+              </div>
+              <div class="card-face back">
+                <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="storyTeller.uid !== uid" class="card-body text-center">
-          <div *ngIf="loading === false">
+          <div *ngIf="storyTeller.uid == uid" class="card-body text-center">
             <div *ngIf="card.key == storyTeller.uid">
-              <strong>This is the card explained by {{ storyTeller.name }}</strong>
+              My card
             </div>
             <div *ngIf="card.key != storyTeller.uid">
               This is the card choosen by {{ getPlayerByUID(card.key) }}
@@ -83,24 +86,42 @@
             </div>
           </div>
 
-          <button
-            *ngIf="myVote == ''"
-            type="button"
-            class="btn btn-warning"
-            (click)="finalCard(card)">
-            This is the card
-          </button>
+          <div *ngIf="storyTeller.uid !== uid" class="card-body text-center">
+            <div *ngIf="loading === false">
+              <div *ngIf="card.key == storyTeller.uid">
+                <strong>This is the card explained by {{ storyTeller.name }}</strong>
+              </div>
+              <div *ngIf="card.key != storyTeller.uid">
+                This is the card choosen by {{ getPlayerByUID(card.key) }}
+              </div>
+
+              <div class="dots" *ngIf="card.value.choosenBy != undefined">
+                <div
+                  *ngFor="let vote of card.value.choosenBy | keyvalue"
+                  class="blob {{ vote.value.color }} ready float-left">
+                </div>
+              </div>
+            </div>
+
+            <button
+              *ngIf="myVote == ''"
+              type="button"
+              class="btn btn-warning"
+              (click)="finalCard(card)">
+              This is the card
+            </button>
+          </div>
+
         </div>
-
       </div>
-    </div>
 
-    <div *ngIf="loading === false && host" class="container text-center">
-      <button type="button" class="btn btn-warning" (click)="nextRound()">
-        Next round
-      </button>
-    </div>
+      <div *ngIf="loading === false && host" class="container text-center">
+        <button type="button" class="btn btn-warning" (click)="nextRound()">
+          Next round
+        </button>
+      </div>
 
+    </div>
   </div>
 
 </div>

@@ -96,3 +96,109 @@ div.points {
 .card-title {
   height: 450px;
 }
+
+.decks {
+  .card1 {
+      left:60%;
+      margin-left:-13em;
+      z-index:10;
+      transform: rotateZ(-3deg);
+      -moz-transform: rotateZ(-3deg);
+      -webkit-transform: rotateZ(-3deg);
+      transition: all 0.5s ease-out 0.3s;
+  }
+  .card2 {
+      left:60%;
+      margin-left:-12em;
+      z-index:9;
+      transition: all 0.5s ease-out 0.15s;
+  }
+  .card3 {
+      left:60%;
+      margin-left:-11em;
+      z-index:8;
+      transform: rotateZ(3deg);
+      -webkit-transform: rotateZ(3deg);
+      -moz-transform: rotateZ(3deg);
+      transition: all 0.5s ease-out;
+  }
+
+  .start section {
+      left:-100%;
+      opacity:0;
+      transform: rotateZ(0deg);
+      -webkit-transform: rotateZ(0deg);
+      -moz-transform: rotateZ(0deg);
+  }
+
+  .cards-container {
+      position:relative;
+      width: 18em;
+      margin:4em auto;
+  }
+
+  #stack section {
+      position:absolute;
+      top:0;
+      background: linear-gradient(to top, #996633 0%, #663300 100%);
+      box-shadow: 1px 1px 7px rgba(0,0,0,.65);
+      border-radius:0em;
+      //padding: 2em;
+      width:15em;
+      max-width:15em;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      height: 350px;
+  }
+
+  #stack section a {
+      margin:0em -2em;
+      display:block;
+      width:120%;
+      max-width:24em;
+      position:relative;
+      line-height:1em;
+  }
+
+  #stack section a:after {
+      content: "";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0px;
+      bottom:1px;
+      border-bottom:1px solid rgba(0,0,0,0.35);
+      border-top:1px solid rgba(0,0,0,0.15);
+  }
+
+  #stack section h1 {
+      margin-top:0;
+  }
+
+  #stack section p {
+      line-height:1.75em;
+      margin-bottom:0;
+  }
+
+  img { max-width:100% }
+
+  @media (min-width:880px) {
+      .cards-container {
+          width: 24em;
+      }
+  }
+
+  @media (min-width:1075px) {
+      .cards-container {
+          width: 38em;
+      }
+  }
+
+  @media (max-height:550px) {
+      .cards-container {
+          width: 24em;
+      }
+  }
+}
+
+

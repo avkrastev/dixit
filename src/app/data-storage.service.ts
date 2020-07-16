@@ -61,11 +61,10 @@ export class DataStorageService {
   }
 
   fetchRoom(room:string) {
-    let newPlayerJoined = false;
-
     return this.db.collection('rooms', ref => ref.where('key', '==', room)).snapshotChanges().pipe(
       map(actions => {
         const filteredData = actions.map(a => {
+          let newPlayerJoined = false;
           const data:any = a.payload.doc.data();
           const id = a.payload.doc.id;
           const uid = JSON.parse(localStorage.getItem('uid'));

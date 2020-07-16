@@ -13,17 +13,17 @@ import { CanComponentDeactivate } from './can-deactivate-guard.service';
 export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   fetchRoomSub: Subscription;
   cards: any;
-  storyTellerCardsCount: number;
   storyteller: boolean = false;
   storyTeller: any;
   waitingForTale: boolean = true;
   storyText: string;
   players: any;
   status: string = '';
-  myCardsCount:number;
   uid: number;
   counter:any;
   listenersIntervalId;
+  tellStoryBtnDisabled: boolean = false;
+  fitMostBtnDisabled: boolean = false;
 
   constructor(
     private modalsService: ModalsService,
@@ -67,13 +67,11 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
           this.storyteller = this.storyTeller.storyteller;
         }
 
-        if (typeof this.storyTeller.cards != 'undefined') {
-          this.storyTellerCardsCount = Object.keys(this.storyTeller.cards).length;
-        }
-
+        this.tellStoryBtnDisabled = false;
         if (typeof roomData.story != 'undefined') {
           this.storyText = roomData.story;
           this.waitingForTale = false;
+          this.tellStoryBtnDisabled = true;
           // clearInterval(intervalId);
 
           // this.counter = { min: ('00' + 2).slice(-2), sec: ('00' + 0).slice(-2) };
@@ -82,7 +80,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         }
 
         this.players = listeners;
-        this.myCardsCount = Object.keys(player.cards).length;
+        this.fitMostBtnDisabled = player.roundFinished !== undefined ? player.roundFinished : false;
       }
     );
   }

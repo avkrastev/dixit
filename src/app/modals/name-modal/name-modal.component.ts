@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { NewGameService } from 'src/app/new-game.service';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router } from '@angular/router';
 import { DataStorageService } from 'src/app/data-storage.service';
 import { Subscription } from 'rxjs';
 import { ModalsService } from 'src/app/modals.service';
@@ -19,11 +18,9 @@ export class NameModalComponent implements OnInit, OnDestroy {
 
   constructor(
     public activeModal: NgbActiveModal,
-    private newGameService: NewGameService,
     private dataStorage: DataStorageService,
     private modalsService: ModalsService,
     private router: Router,
-    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +37,10 @@ export class NameModalComponent implements OnInit, OnDestroy {
   }
 
   setUsername() {
-    this.newGameService.storeName(this.username);
+    //this.newGameService.storeName(this.username);
+    localStorage.setItem('username', JSON.stringify(this.username));
+    localStorage.setItem('uid', JSON.stringify(Date.now()));
+
     let currentURL = this.router.url.split('/');
     let roomParamIndex = currentURL.findIndex(element => {return element == 'room'});
 

@@ -7,8 +7,6 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { RoomComponent } from './room/room.component';
 import { StartComponent } from './start/start.component';
-import { NameModalComponent } from './modals/name-modal/name-modal.component';
-import { RoomModalComponent } from './modals/room-modal/room-modal.component';
 import { PlayersComponent } from './room/players/players.component';
 import { PlayerComponent } from './room/players/player/player.component';
 
@@ -40,7 +38,7 @@ import { CanDeactivateGuard } from './room/game/can-deactivate-guard.service';
     WinnerComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
@@ -49,9 +47,5 @@ import { CanDeactivateGuard } from './room/game/can-deactivate-guard.service';
   ],
   providers: [CanDeactivateGuard],
   bootstrap: [AppComponent],
-  entryComponents: [
-    NameModalComponent,
-    RoomModalComponent,
-],
 })
 export class AppModule { }

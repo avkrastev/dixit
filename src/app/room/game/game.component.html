@@ -52,7 +52,7 @@
         <div class="card-body text-center">
           <button
             *ngIf="storyteller"
-            [disabled]="storyTellerCardsCount < 6"
+            [disabled]="tellStoryBtnDisabled"
             type="button"
             (click)="tellStory(card.value)"
             class="btn btn-warning">
@@ -60,7 +60,7 @@
           </button>
           <button
             *ngIf="!storyteller"
-            [disabled]="waitingForTale || myCardsCount < 6"
+            [disabled]="waitingForTale || fitMostBtnDisabled"
             type="button"
             (click)="listenerCardChoice(card.value)"
             class="btn btn-warning">

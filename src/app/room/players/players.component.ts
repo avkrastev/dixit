@@ -146,7 +146,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
       .subscribe(roomData =>  {
         const allPlayers = roomData.players.filter(players => { return players.name != '' });
 
-        let allCards = Array.from(Array(115), (_, i) => i + 1);
+        let allCards = Array.from(Array(125), (_, i) => i + 1);
 
         for (let player in allPlayers) {
           let cardsPerPlayer = [];

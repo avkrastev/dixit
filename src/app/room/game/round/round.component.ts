@@ -167,6 +167,8 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     for (let k in listeners) {
       if (listeners[k] == this.uid) {
         for (let contributor in this.roomData.selectedCards[listeners[k]]['choosenBy']) {
+          if (this.roomData.selectedCards[listeners[k]]['choosenBy'][contributor].uid == this.uid) continue;
+
           if (this.myPoints != '') {
             this.myPoints += ' \n + 1 point from ' + this.roomData.selectedCards[listeners[k]]['choosenBy'][contributor].name;
           } else {
@@ -221,19 +223,21 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     // add new card to each player
     if (this.roomData.round > 1) {
       for (let player in this.players) {
-        if (this.players[player].roundFinished != undefined) {
-          this.players[player].roundFinished = false;
-        }
-        const randomNumber = Math.floor(Math.random() * (Object.keys(this.roomData.remainingCards).length - 0 + 1)) + 0;
-
-        for (let i = 0; i < 6; i++) {
-          if (this.players[player].cards[i] == undefined) {
-            this.players[player].cards[i] = this.roomData.remainingCards[randomNumber];
+        if (Object.keys(this.roomData.remainingCards).length > 0) {
+          if (this.players[player].roundFinished != undefined) {
+            this.players[player].roundFinished = false;
           }
+          const randomNumber = Math.floor(Math.random() * (Object.keys(this.roomData.remainingCards).length - 0 + 1)) + 0;
+
+          for (let i = 0; i < 6; i++) {
+            if (this.players[player].cards[i] == undefined) {
+              this.players[player].cards[i] = this.roomData.remainingCards[randomNumber];
+            }
+          }
+          let remainingCards = Object.values(this.roomData.remainingCards);
+          remainingCards.splice(randomNumber, 1);
+          this.roomData.remainingCards = { ...remainingCards };
         }
-        let remainingCards = Object.values(this.roomData.remainingCards);
-        remainingCards.splice(randomNumber, 1);
-        this.roomData.remainingCards = { ...remainingCards };
       }
     }
 

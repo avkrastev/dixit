@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { ModalsService } from './modals.service';
 import { Room } from './models/room.model';
 import { Player } from './models/player.model';
@@ -10,25 +10,16 @@ export class NewGameService {
   gameChanged = new BehaviorSubject<any>(null);
   roomCode : string;
   game : Room[] = [];
-  username : string;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private modalsService: ModalsService,
-  ){
-    this.username = JSON.parse(localStorage.getItem('username'));
-  }
+  )
+  {}
 
   storeName(username:string) {
     localStorage.setItem('username', JSON.stringify(username));
     localStorage.setItem('uid', JSON.stringify(Date.now()));
-
-    this.username = username;
-  }
-
-  get loggedUser() {
-    return this.username
   }
 
   removeUsername() {
