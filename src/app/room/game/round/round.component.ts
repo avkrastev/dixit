@@ -24,6 +24,8 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
   uid: number;
   host: boolean = false;
   myPoints: string;
+  hostname: any;
+  selectedCard: any;
 
   constructor(
     private dataStorage: DataStorageService,
@@ -51,11 +53,14 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
         this.storyTeller = this.roomData.players.find(players => { return players.storyteller == true });
         this.cards = this.shuffle(this.roomData.selectedCards);
         this.host = this.roomData.players.find(players => { return players.host == true && players.uid == this.uid.toString() });
+        this.hostname = this.roomData.players.find(players => { return players.host == true });
 
         let counter = 0;
         for (let key in this.roomData.selectedCards) {
           if (this.roomData.selectedCards[key]['choosenBy'] !== undefined) {
             const myVote = this.roomData.selectedCards[key]['choosenBy'].find(voter => { return voter.uid == this.uid.toString() });
+            this.selectedCard = this.roomData.selectedCards[key];
+
             if (myVote !== undefined) {
               this.myVote = myVote.color; // boolean?
             }

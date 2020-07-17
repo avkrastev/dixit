@@ -15,6 +15,9 @@
       <div *ngIf="loading === false && myPoints != ''" class="text-center summary">
         {{ myPoints }}
       </div>
+      <div *ngIf="loading === false && myPoints != ''" class="text-center summary">
+        <small><strong>{{ hostname.name }}</strong> (as a host) can proceed now to the next round</small>
+      </div>
     </div>
   </div>
 
@@ -34,27 +37,22 @@
       </tbody>
     </table>
   </div> -->
-  <!-- <div class="container decks">
-    <div class="row">
-      <div class="col-sm-12">
-        <div id="stack" class="cards-container">
-          <section id="card1" class="card card1"></section>
-          <section id="card2" class="card card2"></section>
-          <section id="card3" class="card card3"></section>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12 text-center">
-        <button
-          type="button"
-          class="btn btn-warning">
-          Show cards
-        </button>
-      </div>
-    </div>
-  </div> -->
 
   <div class="container">
+    <div *ngIf="loading === false && host" class="container text-center mt-4">
+      <button type="button" class="btn btn-warning" (click)="nextRound()">
+        Next round
+      </button>
+    </div>
+    <!-- <div *ngIf="loading === true && myVote != ''" class="decks">
+      <div id="stack" class="cards-container">
+        <section *ngFor="let card of cards | keyvalue; let i = index" class="card card{{ i }}">
+          <img class="card-img-top" src="/assets/images/cards/{{ card.value.card }}.png" alt="Dixit card">
+        </section>
+      </div>
+    </div> -->
+
+    <!-- <div *ngIf="myVote == ''" class="card-deck-wrapper"> -->
     <div class="card-deck-wrapper">
       <div class="card-deck">
         <div
@@ -103,6 +101,8 @@
               </div>
             </div>
 
+            <div *ngIf="loading === true && myVote != '' && selectedCard.card == card.value.card ">My choice</div>
+
             <button
               *ngIf="myVote == ''"
               type="button"
@@ -114,13 +114,6 @@
 
         </div>
       </div>
-
-      <div *ngIf="loading === false && host" class="container text-center">
-        <button type="button" class="btn btn-warning" (click)="nextRound()">
-          Next round
-        </button>
-      </div>
-
     </div>
   </div>
 

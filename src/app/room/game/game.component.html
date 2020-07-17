@@ -7,12 +7,12 @@
   </div>
   <div *ngIf="waitingForTale && !storyteller && status == ''" class="jumbotron jumbotron-fluid standings">
     <div class="container">
-      <h1 class="display-4 text-center loading">Waiting for {{ storyTeller != undefined ? storyTeller.name : '' }} to tell us a story </h1>
+      <h1 class="display-4 text-center loading">Waiting for <strong>{{ storyTeller != undefined ? storyTeller.name : '' }}</strong> to tell us a story </h1>
     </div>
   </div>
   <div *ngIf="waitingForTale && storyteller && status == ''" class="jumbotron jumbotron-fluid standings">
     <div class="container">
-      <h1 class="display-4 text-center loading">{{ storyTeller != undefined ? storyTeller.name : '' }}, it is your turn to tell a story </h1>
+      <h1 class="display-4 text-center loading"><strong>{{ storyTeller != undefined ? storyTeller.name : '' }}</strong>, it is your turn to tell a story </h1>
     </div>
   </div>
   <div *ngIf="!waitingForTale && status == ''" class="jumbotron jumbotron-fluid standings">
@@ -29,7 +29,7 @@
           <div class="points">({{ player.points }} p.) </div>
         </div>
       </div>
-      <h1 class="display-4 text-center">The story: "<strong>{{ storyText }}</strong>" told by {{ storyTeller.name }}</h1>
+      <h1 class="display-4 text-center">The story: "<strong>{{ storyText }}</strong>" told by <strong>{{ storyTeller.name }}</strong></h1>
     </div>
   </div>
 

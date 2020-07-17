@@ -51,4 +51,8 @@ export class StartComponent implements OnInit {
     this.modalsService.open(modal);
   }
 
+  howToPlay() {
+    this.modalsService.open('rules');
+  }
+
 }
