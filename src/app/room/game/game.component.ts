@@ -47,6 +47,12 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         const username = JSON.parse(localStorage.getItem('username'));
         this.uid = JSON.parse(localStorage.getItem('uid'));
 
+        const existingPlayer = roomData.players.find(players => { return players.uid == this.uid.toString() });
+        if (existingPlayer == undefined) {
+          this.router.navigate(['room/'+room]);
+          return;
+        }
+
         if (roomData.nextRound) {
           this.dataStorage.updateRoom({ ...roomData, nextRound: false});
         }

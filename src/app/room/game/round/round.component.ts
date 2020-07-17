@@ -45,9 +45,14 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     this.dataStorage.fetchStartedGame(room)
     .subscribe(
       data => {
-        // TODO check if room exists
         this.roomData = Object.assign({}, ...data);
         this.uid = JSON.parse(localStorage.getItem('uid'));
+
+        const existingPlayer = this.roomData.players.find(players => { return players.uid == this.uid.toString() });
+        if (existingPlayer == undefined) {
+          this.router.navigate(['room/'+room]);
+          return;
+        }
 
         this.players = this.roomData.players.filter(players => { return players.name != '' });
         this.storyTeller = this.roomData.players.find(players => { return players.storyteller == true });

@@ -63,7 +63,7 @@ $ firebase init
 Choose, **Hosting: Configure and deploy Firebase Hosting sites** (by clicking the space button and then Enter).
 > What do you want to use as your public directory? (public)
 
-Here you type `dist/dixit`.
+Here you type `dist/dixit/browser`.
 
 > Configure as a single-page app (rewrite all urls to /index.html)?
 
