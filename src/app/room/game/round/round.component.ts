@@ -25,7 +25,8 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
   host: boolean = false;
   myPoints: string;
   hostname: any;
-  selectedCard: any;
+  myChoice: any;
+  story: string;
 
   constructor(
     private dataStorage: DataStorageService,
@@ -48,7 +49,13 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
         this.roomData = Object.assign({}, ...data);
         this.uid = JSON.parse(localStorage.getItem('uid'));
 
+        if (window.history.state.playerToRemove !== undefined) {
+          this.router.navigate(['/']);
+          return;
+        }
+
         const existingPlayer = this.roomData.players.find(players => { return players.uid == this.uid.toString() });
+
         if (existingPlayer == undefined) {
           this.router.navigate(['room/'+room]);
           return;
@@ -59,12 +66,12 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
         this.cards = this.shuffle(this.roomData.selectedCards);
         this.host = this.roomData.players.find(players => { return players.host == true && players.uid == this.uid.toString() });
         this.hostname = this.roomData.players.find(players => { return players.host == true });
+        this.story = this.roomData.story;
 
         let counter = 0;
         for (let key in this.roomData.selectedCards) {
           if (this.roomData.selectedCards[key]['choosenBy'] !== undefined) {
             const myVote = this.roomData.selectedCards[key]['choosenBy'].find(voter => { return voter.uid == this.uid.toString() });
-            this.selectedCard = this.roomData.selectedCards[key];
 
             if (myVote !== undefined) {
               this.myVote = myVote.color; // boolean?
@@ -128,6 +135,8 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
       }
     }
 
+    this.myChoice = card.value.card;
+
     this.dataStorage.updateRoom({ ...this.roomData});
   }
 
@@ -147,10 +156,10 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     let storyCardGuesses = 0;
     const storyCard = this.roomData.selectedCards[this.storyTeller.uid].card;
     let listeners = [];
+    this.myPoints = '';
 
     for (let key in this.roomData.selectedCards) {
       if (this.roomData.selectedCards[key]['choosenBy'] !== undefined) {
-        this.myPoints = '';
 
         for (let player in this.roomData.selectedCards[key]['choosenBy']) {
           if (this.roomData.selectedCards[key].card == storyCard) {
@@ -220,15 +229,11 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     let storyTellerIndex = +Object.keys(this.roomData.players).find(key => this.roomData.players[key] === this.storyTeller);
     this.roomData.players[storyTellerIndex].storyteller = false;
 
-    if (storyTellerIndex == this.players.length - 1) {
-      storyTellerIndex = 0;
-    } else {
-      storyTellerIndex++;
-    }
+    this.nextStoryTeller(++storyTellerIndex);
+
     delete this.roomData.story;
 
     this.roomData.selectedCards = {};
-    this.roomData.players[storyTellerIndex].storyteller = true;
 
     // add new card to each player
     if (this.roomData.round > 1) {
@@ -252,6 +257,18 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     }
 
     this.dataStorage.updateRoom({ ...this.roomData });
+  }
+
+  nextStoryTeller(index) {
+    if (index == Object.keys(this.roomData.players).length - 1) {
+      index = 0;
+    }
+
+    if (this.roomData.players[index].name !== '') {
+      this.roomData.players[index].storyteller = true;
+      return index;
+    }
+    return this.nextStoryTeller(++index);
   }
 
   @HostListener('window:beforeunload')

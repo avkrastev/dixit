@@ -9,6 +9,9 @@
           <div class="points">({{ player.points }} p.) </div>
         </div>
       </div>
+      <div *ngIf="loading === true" class="text-center">
+        <p class="text-center">The story was: "<strong>{{ story }}</strong>" told by <strong>{{ storyTeller == undefined ? '' : storyTeller.name }}</strong></p>
+      </div>
       <div *ngIf="loading" class="text-center loading">
         Waiting for the players to choose a card
       </div>
@@ -70,10 +73,10 @@
           </div>
           <div *ngIf="storyTeller.uid == uid" class="card-body text-center">
             <div *ngIf="card.key == storyTeller.uid">
-              My card
+              <small>My card</small>
             </div>
             <div *ngIf="card.key != storyTeller.uid">
-              This is the card choosen by {{ getPlayerByUID(card.key) }}
+              <small>This is the card submitted by {{ getPlayerByUID(card.key) }}</small>
             </div>
 
             <div class="dots" *ngIf="card.value.choosenBy != undefined">
@@ -87,10 +90,10 @@
           <div *ngIf="storyTeller.uid !== uid" class="card-body text-center">
             <div *ngIf="loading === false">
               <div *ngIf="card.key == storyTeller.uid">
-                <strong>This is the card explained by {{ storyTeller.name }}</strong>
+                <small><strong>This is the card explained by {{ storyTeller.name }}</strong></small>
               </div>
               <div *ngIf="card.key != storyTeller.uid">
-                This is the card choosen by {{ getPlayerByUID(card.key) }}
+                <small>This is the card submitted by {{ getPlayerByUID(card.key) }}</small>
               </div>
 
               <div class="dots" *ngIf="card.value.choosenBy != undefined">
@@ -101,7 +104,9 @@
               </div>
             </div>
 
-            <div *ngIf="loading === true && myVote != '' && selectedCard.card == card.value.card ">My choice</div>
+            <div *ngIf="loading === true && myVote != '' && myChoice == card.value.card">
+              <small>My choice</small>
+            </div>
 
             <button
               *ngIf="myVote == ''"

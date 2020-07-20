@@ -47,6 +47,11 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         const username = JSON.parse(localStorage.getItem('username'));
         this.uid = JSON.parse(localStorage.getItem('uid'));
 
+        if (window.history.state.playerToRemove !== undefined) {
+          this.router.navigate(['/']);
+          return;
+        }
+
         const existingPlayer = roomData.players.find(players => { return players.uid == this.uid.toString() });
         if (existingPlayer == undefined) {
           this.router.navigate(['room/'+room]);
@@ -60,6 +65,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         const player = roomData.players.find(players => { return players.uid == this.uid.toString() && players.name == username });
 
         this.storyTeller = roomData.players.find(players => { return players.storyteller == true });
+
         const listeners = roomData.players.filter(players => { return players.storyteller == false && players.name != ''});
 
         if (typeof roomData.selectedCards != 'undefined' && Object.keys(listeners).length + 1 == Object.keys(roomData.selectedCards).length) {

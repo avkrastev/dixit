@@ -110,6 +110,7 @@ export class PlayersComponent implements OnInit, OnDestroy {
           newColorSlot.uid = uid;
           newColorSlot.host = ownPlayer.host;
           newColorSlot.ready = ownPlayer.ready;
+          newColorSlot.storyteller = ownPlayer.storyteller;
 
           this.newGameService.resetPlayerFields(ownPlayer);
         }
