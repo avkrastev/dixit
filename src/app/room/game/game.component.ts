@@ -59,7 +59,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         }
 
         if (roomData.nextRound) {
-          this.dataStorage.updateRoom({ ...roomData, nextRound: false});
+          this.dataStorage.updateRoom({ ...roomData, nextRound: false, winner: false}, 'New round has started!');
         }
 
         const player = roomData.players.find(players => { return players.uid == this.uid.toString() && players.name == username });

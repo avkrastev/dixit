@@ -27,6 +27,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
   hostname: any;
   myChoice: any;
   story: string;
+  winnerBtn: boolean = false;
 
   constructor(
     private dataStorage: DataStorageService,
@@ -93,7 +94,12 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
         }
 
         this.winner = this.newGameServices.winner(this.roomData);
+        this.winnerBtn = false;
         if (Object.keys(this.winner).length > 0) {
+          this.winnerBtn = true;
+        }
+
+        if (this.roomData.winner) {
           this.router.navigate(['/room/'+room+'/winner']);
         }
 
@@ -103,8 +109,12 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
   }
 
   nextRound() {
-    this.resetData();
-    this.dataStorage.updateRoom({ ...this.roomData, nextRound: true });
+    if (this.winnerBtn) {
+      this.dataStorage.updateRoom({ ...this.roomData, winner: true }, 'We have a winner!');
+    } else {
+      this.resetData();
+      this.dataStorage.updateRoom({ ...this.roomData, nextRound: true }, 'Round '+this.roomData.round+' is starting.');
+    }
   }
 
   private shuffle(obj) {
@@ -137,7 +147,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
 
     this.myChoice = card.value.card;
 
-    this.dataStorage.updateRoom({ ...this.roomData});
+    this.dataStorage.updateRoom({ ...this.roomData}, 'Finishing round');
   }
 
   log(val) {
@@ -221,7 +231,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     this.roomData.round++;
     this.roomData.nextRound = false;
     // set points
-    this.dataStorage.updateRoom({ ...this.roomData });
+    this.dataStorage.updateRoom({ ...this.roomData }, 'Setting points');
   }
 
   private resetData() {
@@ -256,7 +266,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
       }
     }
 
-    this.dataStorage.updateRoom({ ...this.roomData });
+    this.dataStorage.updateRoom({ ...this.roomData }, 'Reset data');
   }
 
   nextStoryTeller(index) {
