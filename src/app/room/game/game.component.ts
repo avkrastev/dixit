@@ -92,7 +92,12 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         }
 
         this.players = listeners;
+
         this.fitMostBtnDisabled = player.roundFinished !== undefined ? player.roundFinished : false;
+
+        if (Object.keys(this.storyTeller.cards).length == 0) {
+          this.router.navigate(['/room/'+room+'/winner']);
+        }
       }
     );
   }

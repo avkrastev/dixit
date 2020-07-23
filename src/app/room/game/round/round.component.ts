@@ -248,11 +248,15 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     // add new card to each player
     if (this.roomData.round > 1) {
       for (let player in this.players) {
+        if (this.players[player].roundFinished != undefined) {
+          this.players[player].roundFinished = false;
+        }
+
         if (Object.keys(this.roomData.remainingCards).length > 0) {
-          if (this.players[player].roundFinished != undefined) {
-            this.players[player].roundFinished = false;
+          let randomNumber = Math.floor(Math.random() * (Object.keys(this.roomData.remainingCards).length - 0 + 1)) + 0;
+          if (Object.keys(this.roomData.remainingCards).length < Object.keys(this.players).length) {
+            randomNumber = 0;
           }
-          const randomNumber = Math.floor(Math.random() * (Object.keys(this.roomData.remainingCards).length - 0 + 1)) + 0;
 
           for (let i = 0; i < 6; i++) {
             if (this.players[player].cards[i] == undefined) {

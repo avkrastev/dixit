@@ -12,6 +12,7 @@ export class WinnerComponent implements OnInit {
   winner: any;
   roomId: string;
   players: any;
+  noCardsLeft: boolean = false;
 
   constructor(
     private router: Router,
@@ -29,10 +30,16 @@ export class WinnerComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
+        this.noCardsLeft = false;
         this.winner = this.newGameServive.winner(roomData);
         this.roomId = roomData.id;
         this.players = roomData.players.filter(players => { return players.name != '' })
                                        .sort(function(a, b) { return b.points - a.points; });
+
+        if (Object.keys(this.winner).length === 0) {
+          this.winner = this.players[0];
+          this.noCardsLeft = true;
+        }
       }
     );
   }
