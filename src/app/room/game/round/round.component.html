@@ -47,6 +47,9 @@
          {{ winnerBtn ? 'We have a winner' : 'Next round' }}
       </button>
     </div>
+    <div *ngIf="nextRoundBtn" class="container text-center mt-4">
+      <button type="button" class="btn btn-warning" (click)="nextRoundRedirect()">Go to next round</button>
+    </div>
     <!-- <div *ngIf="loading === true && myVote != ''" class="decks">
       <div id="stack" class="cards-container">
         <section *ngFor="let card of cards | keyvalue; let i = index" class="card card{{ i }}">

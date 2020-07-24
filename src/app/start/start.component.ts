@@ -22,6 +22,7 @@ export class StartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.modalsService.close();
     const logout = window.history.state.logout;
     const playerToRemove = window.history.state.playerToRemove;
 

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject } from 'rxjs';
 
 import { NameModalComponent } from './modals/name-modal/name-modal.component';
 import { RoomModalComponent } from './modals/room-modal/room-modal.component';
 import { TellStoryComponent } from './modals/tell-story/tell-story.component';
 import { ConfirmComponent } from './modals/confirm/confirm.component';
-import { BehaviorSubject } from 'rxjs';
 import { RulesComponent } from './modals/rules/rules.component';
+import { LeaveComponent } from './modals/leave/leave.component';
 
 @Injectable({providedIn: 'root'})
 export class ModalsService {
@@ -31,6 +32,9 @@ export class ModalsService {
         break;
       case 'confirm':
         modalComponent = ConfirmComponent;
+        break;
+      case 'leave':
+        modalComponent = LeaveComponent;
         break;
       case 'tellStory':
         modalComponent = TellStoryComponent;

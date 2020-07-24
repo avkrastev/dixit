@@ -98,6 +98,10 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         if (Object.keys(this.storyTeller.cards).length == 0) {
           this.router.navigate(['/room/'+room+'/winner']);
         }
+
+        if (Object.keys(this.players).length < 2) {
+          this.modalsService.open('leave');
+        }
       }
     );
   }

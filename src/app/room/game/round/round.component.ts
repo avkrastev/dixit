@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { NewGameService } from 'src/app/new-game.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
+import { ModalsService } from 'src/app/modals.service';
 
 @Component({
   selector: 'app-round',
@@ -28,12 +29,14 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
   myChoice: any;
   story: string;
   winnerBtn: boolean = false;
+  nextRoundBtn: boolean = false;
 
   constructor(
     private dataStorage: DataStorageService,
     private route: ActivatedRoute,
     private router: Router,
-    private newGameServices: NewGameService
+    private newGameServices: NewGameService,
+    private modalsService: ModalsService,
   )
   { }
 
@@ -103,6 +106,19 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
           this.router.navigate(['/room/'+room+'/winner']);
         }
 
+        if (Object.keys(this.players).length < 3) {
+          this.modalsService.open('leave');
+        }
+
+        this.nextRoundBtn = false;
+        if (this.route.snapshot.params['round'] < this.roomData.round) {
+          const playersReady = this.roomData.players.filter(players => { return players.roundFinished == true });
+
+          if (Object.keys(playersReady).length == 0) {
+            this.nextRoundBtn = true;
+          }
+        }
+
         // this.leaderboard = Array(31);
       }
     );
@@ -125,6 +141,10 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
       acc[e.key] = e.value;
       return acc;
     }, {});
+  }
+
+  nextRoundRedirect() {
+    this.router.navigate(['/room/'+this.roomData.key+'/round/'+this.roomData.round]);
   }
 
   finalCard(card) {
