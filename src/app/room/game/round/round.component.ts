@@ -46,12 +46,16 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
     if (room == 404) {
       this.router.navigate(['/room/404']);
     }
+    this.modalsService.close();
 
     this.dataStorage.fetchStartedGame(room)
     .subscribe(
       data => {
         this.roomData = Object.assign({}, ...data);
         this.uid = JSON.parse(localStorage.getItem('uid'));
+        if (this.uid === null) {
+          this.modalsService.open('enterName');
+        }
 
         if (window.history.state.playerToRemove !== undefined) {
           this.router.navigate(['/']);

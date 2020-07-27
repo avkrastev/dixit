@@ -116,6 +116,9 @@ export class DataStorageService {
       if (playerToRemove.host) {
         playersLeft.host = true;
       }
+      if (playerToRemove.storyteller) {
+        playersLeft.storyteller = true;
+      }
       method = 'updateRoom';
     }
 

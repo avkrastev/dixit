@@ -40,12 +40,16 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     }
     // this.counter = { min: ('00' + 2).slice(-2), sec: ('00' + 0).slice(-2) };
     // const intervalId = this.timer();
+    this.modalsService.close();
 
     this.dataStorage.fetchStartedGame(room).subscribe(
       data => {
         const roomData = Object.assign({}, ...data);
         const username = JSON.parse(localStorage.getItem('username'));
         this.uid = JSON.parse(localStorage.getItem('uid'));
+        if (this.uid === null) {
+          this.modalsService.open('enterName');
+        }
 
         if (window.history.state.playerToRemove !== undefined) {
           this.router.navigate(['/']);
@@ -137,7 +141,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
     this.modalsService.open('confirm');
   }
 
-  @HostListener('window:beforeunload')
+  // @HostListener('window:beforeunload')
   canDeactivate (): Observable<boolean> | Promise<boolean> | boolean {
     return confirm('Are you sure you want to leave?');
   }
