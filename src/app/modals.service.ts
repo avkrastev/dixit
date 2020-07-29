@@ -13,6 +13,7 @@ import { LeaveComponent } from './modals/leave/leave.component';
 export class ModalsService {
   hostOrJoin = new BehaviorSubject<string>('host');
   selectedCard = new BehaviorSubject<number>(null);
+  leaveRoute = new BehaviorSubject<boolean>(false);
 
   constructor(
     private modalService: NgbModal

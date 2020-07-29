@@ -67,9 +67,7 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
         }
 
         const player = roomData.players.find(players => { return players.uid == this.uid.toString() && players.name == username });
-
         this.storyTeller = roomData.players.find(players => { return players.storyteller == true });
-
         const listeners = roomData.players.filter(players => { return players.storyteller == false && players.name != ''});
 
         if (typeof roomData.selectedCards != 'undefined' && Object.keys(listeners).length + 1 == Object.keys(roomData.selectedCards).length) {
@@ -136,12 +134,15 @@ export class GameComponent implements OnInit, OnDestroy, CanComponentDeactivate 
   }
 
   listenerCardChoice(card) {
-    // TODO should I use other subject?
     this.modalsService.selectedCard.next(card);
     this.modalsService.open('confirm');
   }
 
-  // @HostListener('window:beforeunload')
+  @HostListener('window:beforeunload', ['$event'])
+  handleClose($event) {
+      $event.returnValue = false;
+  }
+
   canDeactivate (): Observable<boolean> | Promise<boolean> | boolean {
     return confirm('Are you sure you want to leave?');
   }

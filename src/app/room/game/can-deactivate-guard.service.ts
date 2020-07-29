@@ -13,7 +13,7 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
                 currentState: RouterStateSnapshot,
                 nextState?: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean
   {
-    if (nextState.url == '/') {
+    if (nextState.url == '/' && component['modalsService'].leaveRoute.getValue() === false) {
       return component.canDeactivate();
     }
     return true;

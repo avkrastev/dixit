@@ -42,6 +42,7 @@ export class StartComponent implements OnInit {
     if (!JSON.parse(localStorage.getItem('username'))) {
       this.modalsService.open('enterName');
     } else {
+      this.dataStorage.playersPerRoom.next(null);
       this.dataStorage.newGame();
     }
   }

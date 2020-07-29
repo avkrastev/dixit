@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { DataStorageService } from 'src/app/data-storage.service';
+import { ModalsService } from 'src/app/modals.service';
 
 @Component({
   selector: 'app-leave',
@@ -15,6 +16,7 @@ export class LeaveComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private router: Router,
     private dataStore: DataStorageService,
+    private modalsService: ModalsService,
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +28,7 @@ export class LeaveComponent implements OnInit {
 
     if (typeof roomParamIndex != 'undefined') {
       this.dataStore.deleteRoom(currentURL[++roomParamIndex]);
+      this.modalsService.leaveRoute.next(true);
       this.router.navigate(['/']);
     }
   }
