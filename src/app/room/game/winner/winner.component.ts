@@ -18,7 +18,7 @@ export class WinnerComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataStorage: DataStorageService,
-    private newGameServive: NewGameService,
+    private newGameService: NewGameService,
   ) { }
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class WinnerComponent implements OnInit {
           return;
         }
         this.noCardsLeft = false;
-        this.winner = this.newGameServive.winner(roomData);
+        this.winner = this.newGameService.winner(roomData);
         this.roomId = roomData.id;
         this.players = roomData.players.filter(players => { return players.name != '' })
                                        .sort(function(a, b) { return b.points - a.points; });

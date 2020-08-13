@@ -298,7 +298,7 @@ export class RoundComponent implements OnInit, CanComponentDeactivate {
   }
 
   nextStoryTeller(index) {
-    if (index == Object.keys(this.roomData.players).length - 1) {
+    if (index == Object.keys(this.roomData.players).length) {
       index = 0;
     }
 
