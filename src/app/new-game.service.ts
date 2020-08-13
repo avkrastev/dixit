@@ -64,11 +64,12 @@ export class NewGameService {
       const winners = data.players
                           .filter(players => { return players.points >= 30 })
                           .sort(function(a, b) { return b.points - a.points; });
+
       let winner = {};
       if (Object.keys(winners).length == 1) {
         winner = winners[0];
-      } else {
-        if (winners[0] > winners[1]) {
+      } else if ((Object.keys(winners).length > 1)) {
+        if (winners[0].points > winners[1].points) {
           winner = winners[0];
         }
       }
